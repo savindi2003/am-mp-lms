@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/app/auth";
 import { prisma } from "@/lib/db";
 
-// 🔵 GET ONE LECTURE
+
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ lectureId: string }> },
@@ -19,10 +19,10 @@ export async function GET(
   return NextResponse.json(lecture);
 }
 
-// 🟡 UPDATE
+
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { lectureId: string } }
+ context: { params: { lectureId: string } }
 ) {
   const session = await auth();
 
@@ -33,7 +33,7 @@ export async function PATCH(
     );
   }
 
-  const { lectureId } = params;
+  const { lectureId } = context.params;
   const body = await req.json();
 
   const updated = await prisma.courseLectureLink.update({
@@ -60,7 +60,7 @@ export async function PATCH(
   return NextResponse.json(updated);
 }
 
-// 🔴 DELETE
+
 export async function DELETE(
   _req: NextRequest,
   { params }: { params: Promise<{ lectureId: string }> },
