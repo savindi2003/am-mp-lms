@@ -1,0 +1,444 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    Int                     @id @default(autoincrement())
+  email                 String                  @unique
+  NIC                   String                  @unique
+  hashedPassword        String
+  photo                 String?
+  role                  Role                    @default(STUDENT)
+  createdAt             DateTime                @default(now())
+  resetTokenExpires     DateTime?
+  resetTokenHash        String?
+  admin                 Admin?
+  attendanceMarked      Attendance[]
+  courseResource        CourseResource[]
+  courseVideo           CourseVideo[]
+  courseYoutubeVideo    CourseYoutubeVideo[]
+  instructor            Instructor?
+  student               Student?
+  EnrollmentMonthAccess EnrollmentMonthAccess[]
+}
+
+model Student {
+  id                Int      @id @default(autoincrement())
+  firstName         String
+  lastName          String
+  contactNo         String
+  address           String
+  dob               DateTime
+  gender            Gender
+  guardianContactNo String
+  guardianFirstName String
+  guardianLastName  String
+  createdAt         DateTime @default(now())
+  userId            Int      @unique
+
+  enrollments Enrollment[]
+  payment     Payment[]
+
+  user                  User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Attendance            Attendance[]
+  EnrollmentMonthAccess EnrollmentMonthAccess[]
+}
+
+model Instructor {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  title     String
+  createdAt DateTime @default(now())
+  userId    Int      @unique
+  classes   Class[]
+  courses   Course[]
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  createdAt DateTime @default(now())
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CourseType {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  courses   Course[]
+}
+
+model ClassType {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  classes   Class[]
+}
+
+model Course {
+  id                    Int      @id @default(autoincrement())
+  photo                 String
+  courseFee             Int
+  description           String
+  instructorId          Int
+  courseTypeId          Int
+  createdAt             DateTime @default(now())
+  currentWeek           Int      @default(1)
+  installmentsCourseFee Int      @default(0)
+  totalSessions         Int      @default(12)
+
+  courseType         CourseType           @relation(fields: [courseTypeId], references: [id])
+  instructor         Instructor           @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+  courseDay          CourseDay[]
+  courseLectureLinks CourseLectureLink[]
+  courseResource     CourseResource[]
+  courseVideo        CourseVideo[]
+  courseYoutubeVideo CourseYoutubeVideo[]
+  enrollments        Enrollment[]
+}
+
+model Class {
+  id           Int          @id @default(autoincrement())
+  photo        String?
+  classFee     Int
+  description  String
+  month        String?
+  instructorId Int
+  classTypeId  Int
+  createdAt    DateTime     @default(now())
+  attendance   Attendance[]
+
+  meetingLink   String?
+  googleEventId String?
+  expireDate    DateTime?
+
+  classType  ClassType  @relation(fields: [classTypeId], references: [id])
+  instructor Instructor @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+
+  courseLectureLinks CourseLectureLink[]
+  courseResource     CourseResource[]
+  courseVideo        CourseVideo[]
+  courseYoutubeVideo CourseYoutubeVideo[]
+
+  enrollments Enrollment[]
+
+  PaymentClass          PaymentClass[]
+  ClassPackageItem      ClassPackageItem[]
+  EnrollmentMonthAccess EnrollmentMonthAccess[]
+}
+
+model Enrollment {
+  id               Int    @id @default(autoincrement())
+  enrollmentNumber String @unique
+
+  enrollmentStatus EnrollmentStatus @default(ACTIVE)
+
+  studentId Int
+  classId   Int
+
+  activeMonth String? // "2026-06"
+  nextDueAt   DateTime?
+
+  isManuallyOverridden Boolean @default(false)
+  overrideReason       String?
+
+  enrolledAt DateTime @default(now())
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  class   Class   @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  Attendance   Attendance[]
+  PaymentClass PaymentClass[]
+
+  ResourceAccessControl ResourceAccessControl[]
+  VideoAccessControl    VideoAccessControl[]
+
+  Course                Course?                 @relation(fields: [courseId], references: [id])
+  courseId              Int?
+  CourseDay             CourseDay?              @relation(fields: [courseDayId], references: [id])
+  courseDayId           Int?
+  EnrollmentMonthAccess EnrollmentMonthAccess[]
+
+  @@unique([studentId, classId])
+}
+
+model EnrollmentMonthAccess {
+  id Int @id @default(autoincrement())
+
+  enrollmentId Int
+  studentId    Int
+  classId      Int
+  month        String
+
+  status MonthAccessStatus @default(PAID)
+
+  grantedByAdminId Int?
+  reason           String?
+  revokedAt        DateTime?
+
+  createdAt DateTime @default(now())
+
+  enrollment Enrollment @relation(fields: [enrollmentId], references: [id])
+  student    Student    @relation(fields: [studentId], references: [id])
+  class      Class      @relation(fields: [classId], references: [id])
+  User       User?      @relation(fields: [userId], references: [id])
+  userId     Int?
+
+  @@unique([enrollmentId, month])
+}
+
+model Payment {
+  id        Int      @id @default(autoincrement())
+  amount    Int
+  month     String
+  createdAt DateTime @default(now())
+  studentId Int
+
+  receiptKey     String?
+  Student        Student?       @relation(fields: [studentId], references: [id])
+  paymentClasses PaymentClass[]
+}
+
+model PaymentClass {
+  id           Int  @id @default(autoincrement())
+  paymentId    Int
+  classId      Int
+  enrollmentId Int?
+
+  class      Class       @relation(fields: [classId], references: [id], onDelete: Cascade)
+  Enrollment Enrollment? @relation(fields: [enrollmentId], references: [id])
+  payment    Payment     @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+}
+
+model ClassPackage {
+  id       Int    @id @default(autoincrement())
+  name     String // "Theory + Paper"
+  totalFee Int
+
+  createdAt DateTime @default(now())
+
+  items ClassPackageItem[]
+}
+
+model ClassPackageItem {
+  id Int @id @default(autoincrement())
+
+  packageId Int
+  classId   Int
+
+  package ClassPackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  class   Class        @relation(fields: [classId], references: [id], onDelete: Cascade)
+
+  @@unique([packageId, classId])
+}
+
+model Attendance {
+  id Int @id @default(autoincrement())
+
+  enrollmentId Int
+  studentId    Int
+  classId      Int
+  lectureId    String
+
+  present        Boolean
+  markedAt       DateTime @default(now())
+  markedByUserId Int
+
+  enrollment Enrollment        @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  student    Student           @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  class      Class             @relation(fields: [classId], references: [id], onDelete: Cascade)
+  lecture    CourseLectureLink @relation(fields: [lectureId], references: [id], onDelete: Cascade)
+
+  markedBy User @relation(fields: [markedByUserId], references: [id])
+
+  @@unique([lectureId, enrollmentId])
+}
+
+model CourseDay {
+  id         Int          @id @default(autoincrement())
+  day        Weekday
+  courseId   Int?
+  classId    Int?
+  course     Course?      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  Enrollment Enrollment[]
+
+  @@unique([courseId, day])
+  @@unique([classId, day])
+}
+
+model CourseVideo {
+  id               String          @id @default(cuid())
+  title            String
+  description      String?
+  orderIndex       Int             @default(0)
+  visibility       VideoVisibility @default(PUBLISHED)
+  s3Key            String          @unique
+  thumbnailKey     String?
+  originalFilename String
+  mimeType         String
+  sizeBytes        BigInt
+  durationSeconds  Int?
+  status           VideoStatus     @default(UPLOADING)
+  hlsMasterKey     String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  courseId         Int?
+  classId          Int?
+  uploadedByUserId Int
+  class            Class?          @relation(fields: [classId], references: [id], onDelete: Cascade)
+  course           Course?         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  uploadedBy       User            @relation(fields: [uploadedByUserId], references: [id])
+}
+
+model CourseYoutubeVideo {
+  id                 String               @id @default(cuid())
+  title              String
+  description        String?
+  link               String
+  orderIndex         Int                  @default(0)
+  visibility         VideoVisibility      @default(PUBLISHED)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  courseId           Int?
+  classId            Int?
+  uploadedByUserId   Int
+  month              String?
+  class              Class?               @relation(fields: [classId], references: [id], onDelete: Cascade)
+  course             Course?              @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  uploadedBy         User                 @relation(fields: [uploadedByUserId], references: [id])
+  videoAccessControl VideoAccessControl[]
+
+  @@unique([courseId, link])
+  @@unique([classId, link])
+}
+
+model CourseResource {
+  id                    String                  @id @default(cuid())
+  title                 String
+  s3Key                 String                  @unique
+  contentType           String?
+  sizeBytes             Int?
+  createdAt             DateTime                @default(now())
+  courseId              Int?
+  classId               Int?
+  uploadedByUserId      Int
+  month                 String?
+  class                 Class?                  @relation(fields: [classId], references: [id], onDelete: Cascade)
+  course                Course?                 @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  uploadedBy            User                    @relation(fields: [uploadedByUserId], references: [id])
+  resourceAccessControl ResourceAccessControl[]
+
+  @@index([courseId])
+  @@index([classId])
+}
+
+model CourseLectureLink {
+  id               String        @id @default(cuid())
+  title            String
+  meetingLink      String
+  lectureDate      DateTime
+  fromTime         DateTime
+  toTime           DateTime
+  status           LectureStatus @default(SCHEDULED)
+  uploadedByUserId Int
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  courseId         Int?
+  classId          Int?
+  month            String?
+  class            Class?        @relation(fields: [classId], references: [id], onDelete: Cascade)
+  course           Course?       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  Attendance       Attendance[]
+
+  @@index([courseId])
+  @@index([classId])
+}
+
+model VideoAccessControl {
+  enrollmentId       Int
+  videoId            String
+  isAccessed         Boolean            @default(false)
+  enrollment         Enrollment         @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  courseYoutubeVideo CourseYoutubeVideo @relation(fields: [videoId], references: [id], onDelete: Cascade)
+
+  @@unique([enrollmentId, videoId])
+}
+
+model ResourceAccessControl {
+  enrollmentId   Int
+  resourceId     String
+  isAccessed     Boolean        @default(false)
+  enrollment     Enrollment     @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  courseResource CourseResource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@unique([enrollmentId, resourceId])
+}
+
+enum LectureStatus {
+  SCHEDULED
+  LIVE
+  COMPLETED
+  CANCEL
+}
+
+enum Weekday {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+enum PaymentPlan {
+  FULL
+  INSTALLMENTS
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  DROPPED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum Role {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}
+
+enum VideoVisibility {
+  PUBLISHED
+  HIDDEN
+}
+
+enum VideoStatus {
+  UPLOADING
+  READY
+  TRANSCODING
+  FAILED
+  DELETED
+}
+
+enum MonthAccessStatus {
+  PAID
+  OVERRIDDEN
+  REVOKED
+}

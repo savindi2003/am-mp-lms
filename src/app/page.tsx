@@ -1,0 +1,129 @@
+import Image from "next/image";
+import CourseCardBox from "@/modules/home/components/CourseCardBox";
+import HomeNavBar from "@/modules/home/components/HomeNavBar";
+import { getCourses } from "@/modules/courses/data/action";
+import AboutUs from "@/modules/home/components/AboutUs";
+
+export default async function HomePage() {
+  const courses = await getCourses();
+
+  const courseCardData = courses?.map((course) => ({
+    id: course.id,
+    description: course.description,
+    photo: course.photo,
+    courseType: course.courseType.name,
+    instructor: {
+      firstName: course.instructor.firstName,
+      lastName: course.instructor.lastName,
+      title: course.instructor.title,
+      user: {
+        photo: course.instructor.user.photo,
+      },
+    },
+  }));
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      <HomeNavBar />
+
+      {/* Hero (optional ID if you plan to link to it) */}
+      <section id="hero" className="bg-yellow-400 scroll-mt-24">
+        <div className="mx-auto max-w-7xl sm:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-center">
+            <div className="order-1 md:order-1 flex justify-center">
+              <Image
+                src="/primary/primary-home-header.png"
+                alt="Hero section"
+                width={250}
+                height={300}
+                priority
+                className="w-full max-w-xs"
+                sizes="(min-width:1024px) 480px, (min-width:640px) 360px, 240px"
+              />
+            </div>
+            <div className="order-2 md:order-2 text-center md:text-left mb-5">
+              <h1 className="text-2xl sm:text-4xl lg:text-6xl font-bold text-slate-800 leading-tight">
+                Discover New Skills Today, Create Endless Possibilities
+                Tomorrow{" "}
+              </h1>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Blurb */}
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+          <div>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-slate-700 mb-4">
+              Boost your knowledge and have fun doing it.
+            </h2>
+            <p className="text-slate-700 text-sm sm:text-base mb-4">
+              From your first click to your biggest achievement, we believe
+              every learner deserves a gentle path to growth
+            </p>
+            {/*<Button className="cursor-pointer text-base sm:text-lg">*/}
+            {/*  See More*/}
+            {/*</Button>*/}
+          </div>
+          <div className="flex justify-center">
+            <Image
+              src="/primary/teaching-photo.jpg"
+              alt="Instructor teaching"
+              width={640}
+              height={420}
+              priority
+              className="w-full max-w-md md:max-w-lg h-auto rounded-xs object-cover"
+              sizes="(min-width:1024px) 640px, (min-width:640px) 520px, 100vw"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Courses */}
+      <section id="courses" className="bg-slate-50 scroll-mt-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
+          <div className="grid gap-6 md:grid-cols-[1fr,2fr,auto] items-start md:items-center mb-8">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-slate-800 mx-12">
+              Courses
+            </h2>
+          </div>
+          <CourseCardBox courses={courseCardData} />
+        </div>
+      </section>
+
+      {/* About Us */}
+      <section id="about" className="scroll-mt-24">
+        <AboutUs />
+      </section>
+
+      {/* Contact (simple in-page section to scroll to) */}
+      <section id="contact" className="bg-white py-16 sm:py-20 scroll-mt-24">
+        <div className="mx-auto max-w-4xl lg:px-8 text-center">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-800 mb-10">
+            Ready to start your learning journey?
+          </h2>
+          <p className="text-slate-800 max-w-2xl mx-auto mb-8 bg-yellow-400 w-fit p-2 sm:rounded rounded font-medium flex flex-col sm:flex-row sm:gap-1">
+            Reach us at{" "}
+            <a href="mailto:hello@example.com" className="underline">
+              hello@example.com
+            </a>{" "}
+            <span>or call +94 11 123 4567</span>
+          </p>
+        </div>
+      </section>
+
+      {/* CTA */}
+      {/*<section className="bg-white py-16 sm:py-20">*/}
+      {/*  <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">*/}
+      {/*    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-800 mb-10">*/}
+      {/*      Ready to start your learning journey?*/}
+      {/*    </h2>*/}
+      {/*    <Button className="text-base sm:text-lg lg:text-xl px-6 sm:px-8 py-4 sm:py-5 cursor-pointer">*/}
+      {/*      Get Started*/}
+      {/*    </Button>*/}
+      {/*  </div>*/}
+      {/*</section>*/}
+    </div>
+  );
+}
