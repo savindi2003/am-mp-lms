@@ -68,8 +68,10 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { courseId: string; lectureId: string } }
+  context: any
 ) {
+  const { lectureId } = await context.params;
+
   const session = await auth();
 
   if (session?.user.role !== "ADMIN") {
@@ -79,8 +81,6 @@ export async function PATCH(
     );
   }
 
-  const { lectureId } = params;
-
   const body = await req.json();
 
   const updated = await prisma.courseLectureLink.update({
@@ -88,15 +88,19 @@ export async function PATCH(
     data: {
       title: body.title,
       meetingLink: body.meetingLink,
+
       lectureDate: body.lectureDate
         ? new Date(body.lectureDate)
         : undefined,
+
       fromTime: body.fromTime
         ? new Date(`${body.lectureDate}T${body.fromTime}:00`)
         : undefined,
+
       toTime: body.toTime
         ? new Date(`${body.lectureDate}T${body.toTime}:00`)
         : undefined,
+
       month: body.month,
     },
   });
