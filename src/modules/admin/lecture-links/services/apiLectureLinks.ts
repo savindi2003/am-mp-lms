@@ -43,7 +43,11 @@ export async function updateLectureStatus(
   return res.json();
 }
 
-export async function updateLecture(courseId: number, lectureId: number, payload: any) {
+export async function updateLecture(courseId: string,
+                              lectureId: string,
+                              payload: any
+) {
+  console.log("PAYLOAD:", payload);
   const res = await fetch(
     `/api/backend/admin/courses/${courseId}/lecture-links/${lectureId}`,
     {

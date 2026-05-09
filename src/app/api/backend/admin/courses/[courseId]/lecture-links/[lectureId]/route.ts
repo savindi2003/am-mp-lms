@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/app/auth";
 import { prisma } from "@/lib/db";
 
-
+// 🔵 GET ONE LECTURE
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ lectureId: string }> },
@@ -20,9 +20,55 @@ export async function GET(
 }
 
 
+
+// 🟡 UPDATE
+// export async function PATCH(
+//   req: NextRequest,
+//   { params }: { params: { courseId: string; lectureId: string } }
+// ) {
+//   const session = await auth();
+
+//   if (session?.user.role !== "ADMIN") {
+//     return NextResponse.json(
+//       { error: "Unauthorized" },
+//       { status: 401 }
+//     );
+//   }
+
+//   const { lectureId } = params; // ❗ NO await
+
+//   const body = await req.json();
+
+//   const updated = await prisma.courseLectureLink.update({
+//     where: { id: lectureId },
+//     data: {
+//       title: body.title,
+//       meetingLink: body.meetingLink,
+
+//       lectureDate: body.lectureDate
+//         ? new Date(body.lectureDate)
+//         : undefined,
+
+//       fromTime:
+//         body.lectureDate && body.fromTime
+//           ? new Date(`${body.lectureDate}T${body.fromTime}:00`)
+//           : undefined,
+
+//       toTime:
+//         body.lectureDate && body.toTime
+//           ? new Date(`${body.lectureDate}T${body.toTime}:00`)
+//           : undefined,
+
+//       month: body.month,
+//     },
+//   });
+
+//   return NextResponse.json(updated);
+// }
+
 export async function PATCH(
   req: NextRequest,
- context: { params: { lectureId: string } }
+  { params }: { params: { courseId: string; lectureId: string } }
 ) {
   const session = await auth();
 
@@ -33,7 +79,8 @@ export async function PATCH(
     );
   }
 
-  const { lectureId } = context.params;
+  const { lectureId } = params;
+
   const body = await req.json();
 
   const updated = await prisma.courseLectureLink.update({
@@ -41,26 +88,23 @@ export async function PATCH(
     data: {
       title: body.title,
       meetingLink: body.meetingLink,
-
-      // DATE only
       lectureDate: body.lectureDate
         ? new Date(body.lectureDate)
         : undefined,
-
       fromTime: body.fromTime
-      ? new Date(`${body.lectureDate}T${body.fromTime}:00`)
-      : undefined,
-
+        ? new Date(`${body.lectureDate}T${body.fromTime}:00`)
+        : undefined,
       toTime: body.toTime
-      ? new Date(`${body.lectureDate}T${body.toTime}:00`)
-      : undefined,
+        ? new Date(`${body.lectureDate}T${body.toTime}:00`)
+        : undefined,
+      month: body.month,
     },
   });
 
   return NextResponse.json(updated);
 }
 
-
+// 🔴 DELETE
 export async function DELETE(
   _req: NextRequest,
   { params }: { params: Promise<{ lectureId: string }> },
