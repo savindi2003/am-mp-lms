@@ -65,12 +65,17 @@ export async function GET(
 
 //   return NextResponse.json(updated);
 // }
+type Params = {
+  courseId: string;
+  lectureId: string;
+};
+
 
 export async function PATCH(
-  req: NextRequest,
-  context: any
+  req: Request,
+  context: { params: Params }
 ) {
-  const { lectureId } = await context.params;
+ const { courseId, lectureId } = context.params;
 
   const session = await auth();
 
