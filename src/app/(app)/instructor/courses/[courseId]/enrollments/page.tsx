@@ -9,7 +9,7 @@ type Props = {
 export default async function Page({ params }: Props) {
   const { courseId } = await params;
 
-  const classId = Number(courseId); // 🔥 mapping
+  const classId = Number(courseId); //  mapping
 
   if (isNaN(classId)) return <div>Invalid ID</div>;
 

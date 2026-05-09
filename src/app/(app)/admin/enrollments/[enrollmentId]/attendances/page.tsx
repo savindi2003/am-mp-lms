@@ -105,7 +105,7 @@ import Spinner from "@/modules/shared/components/Spinner";
 
 import AttendanceTable from "@/modules/shared/attendances/components/AttendanceTable";
 
-import { useGetAttendanceByEnrollment } from "@/modules/shared/attendances/hooks/useGetStudentByEnrollment";
+import { useGetStudentByEnrollment } from "@/modules/shared/attendances/hooks/useGetStudentByEnrollment";
 
 function Page() {
   const params =
@@ -116,7 +116,7 @@ function Page() {
   );
 
   const { data, loading } =
-    useGetAttendanceByEnrollment(
+    useGetStudentByEnrollment(
       enrollmentId,
     );
     

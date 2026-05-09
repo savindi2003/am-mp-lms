@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export function useGetStudentNICs() {
+export function dentNICs() {
   const [NICs, setNICs] = useState<any[]>([]);
 
   useEffect(() => {

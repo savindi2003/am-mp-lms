@@ -2,13 +2,12 @@
 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-
 import { getAttendanceByEnrollmentId } from "../services/apiAttendance";
 
-export function useGetAttendanceByEnrollment(
-  enrollmentId: number,
-) {
-  const [data, setData] = useState<any>(null);
+type AttendanceData = unknown;
+
+export function useGetStudentByEnrollment(enrollmentId: number) {
+  const [data, setData] = useState<AttendanceData | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function loadAttendance() {
@@ -17,16 +16,11 @@ export function useGetAttendanceByEnrollment(
     setLoading(true);
 
     try {
-      const res =
-        await getAttendanceByEnrollmentId(
-          enrollmentId,
-        );
-
+      const res = await getAttendanceByEnrollmentId(enrollmentId);
       setData(res);
-    } catch (e: any) {
-      toast.error(
-        e?.message || "Failed to load attendance",
-      );
+    } catch (e: unknown) {
+      const err = e as { message?: string };
+      toast.error(err?.message || "Failed to load attendance");
     } finally {
       setLoading(false);
     }

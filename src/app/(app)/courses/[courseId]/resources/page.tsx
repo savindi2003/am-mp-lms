@@ -16,7 +16,7 @@ import StudentLectureList from "@/modules/courses/[courseId]/components/StudentL
 import StudentLectureLinks from "@/modules/courses/[courseId]/components/StudentLectureLink";
 import { Button } from "@/modules/ui/button";
 import Link from "next/link";
-import { useGetAttendanceByEnrollment } from "@/modules/shared/attendances/hooks/useGetStudentByEnrollment";
+import { useGetStudentByEnrollment } from "@/modules/shared/attendances/hooks/useGetStudentByEnrollment";
 
 
 export default async function CourseVideosPage({
