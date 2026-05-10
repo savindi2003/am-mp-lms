@@ -25,3 +25,9 @@
 
 //   return { links, loading, error };
 // }
+
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  return NextResponse.json({ message: "Payments route working" });
+}
