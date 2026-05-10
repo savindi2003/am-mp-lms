@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import Spinner from "@/modules/shared/components/Spinner";
-import PaymentCardList from "@/modules/payments/components/PaymentCardList";
 import StudentPaymentTable from "@/modules/payments/components/StudentPaymentTable";
 import { getStudentPayments } from "@/modules/payments/data/action";
 

@@ -215,7 +215,7 @@ export async function PATCH(
         select: {
           id: true,
           day: true,
-          _count: { select: { enrollment: true } },
+          _count: { select: { Enrollment: true } },
         },
       });
 
@@ -223,7 +223,7 @@ export async function PATCH(
       for (const row of existing) {
         existingByDay.set(row.day as Weekday, {
           id: row.id,
-          count: row._count.enrollment,
+          count: row._count.Enrollment,
         });
       }
 
@@ -260,7 +260,7 @@ export async function PATCH(
 
       // block removing ALL days if any enrollments exist
       if (incomingSet.size === 0) {
-        const hasEnrollments = existing.some((r) => r._count.enrollment > 0);
+        const hasEnrollments = existing.some((r) => r._count.Enrollment > 0);
         if (hasEnrollments) {
           throw new Error(
             "Cannot remove all course days while enrollments exist. Move or drop enrollments first.",
@@ -270,7 +270,7 @@ export async function PATCH(
 
       // 5) reassign enrollments (if any) then delete
       for (const row of toDelete) {
-        if (row._count.enrollment > 0) {
+        if (row._count.Enrollment > 0) {
           if (!targetDayId) {
             throw new Error(
               `Day ${row.day} has enrollments. Add at least one new day to reassign or keep this day.`,

@@ -25,8 +25,8 @@ export const createClassSchema = z.object({
   coverImage: z.any().optional(),
 
  meetingLink: z.string().optional(), 
-  linkExpireDate: z.coerce.date({
-  required_error: "Expire date is required",
+  linkExpireDate: z.coerce.date().refine((val) => val !== null, {
+  message: "Expire date is required",
 }),
   googleEventId: z.string().optional()
 });

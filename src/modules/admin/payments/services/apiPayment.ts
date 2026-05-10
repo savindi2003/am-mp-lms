@@ -1,19 +1,19 @@
-import { CreatePaymentFormData } from "../validators/createPaymentSchema";
+// import { CreatePaymentFormData } from "../validators/createPaymentSchema";
 
-export async function createAdminPayment(payload: CreatePaymentFormData) {
-  const res = await fetch("/api/backend/admin/payments", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
+// export async function createAdminPayment(payload: CreatePaymentFormData) {
+//   const res = await fetch("/api/backend/admin/payments", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify(payload),
+//   });
 
-  const data = await res.json();
+//   const data = await res.json();
 
-  if (!res.ok) {
-    throw new Error(data.error || "Failed to create payment");
-  }
+//   if (!res.ok) {
+//     throw new Error(data.error || "Failed to create payment");
+//   }
 
-  return data;
-}
+//   return data;
+// }

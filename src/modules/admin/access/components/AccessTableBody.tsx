@@ -3,8 +3,12 @@
 import Table from "@/modules/shared/components/Table";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { updateAccess } from "../services/apiAccessControl";
 
 export default function StudentAccessRow({ data }: any) {
+
+  type Status = "PAID" | "OVERRIDDEN" | "REVOKED";
+
   const router = useRouter();
 
   const changeStatus = async (id: number, status: string) => {
@@ -13,11 +17,11 @@ export default function StudentAccessRow({ data }: any) {
   };
 
   //  STATUS STYLE
-  const statusStyle = {
-    PAID: "bg-green-100 text-green-700",
-    OVERRIDDEN: "bg-blue-100 text-blue-700",
-    REVOKED: "bg-red-100 text-red-600",
-  }[data.status];
+  const statusStyle: Record<Status, string> = {
+  PAID: "bg-green-100 text-green-700",
+  OVERRIDDEN: "bg-blue-100 text-blue-700",
+  REVOKED: "bg-red-100 text-red-600",
+};
 
   // SINGLE ACTION BUTTON LOGIC
   const getAction = () => {
@@ -89,15 +93,15 @@ export default function StudentAccessRow({ data }: any) {
 
       {/*  STATUS */}
       <div>
-        <span
-          className={cn(
-            "text-[11px] px-2 py-1 rounded-full font-semibold",
-            statusStyle
-          )}
-        >
-          {data.status}
-        </span>
-      </div>
+  <span
+    className={cn(
+      "text-[11px] px-2 py-1 rounded-full font-semibold",
+      statusStyle[data.status as Status]
+    )}
+  >
+    {data.status}
+  </span>
+</div>
 
       {/*  ACTION */}
       <div className="flex items-center">

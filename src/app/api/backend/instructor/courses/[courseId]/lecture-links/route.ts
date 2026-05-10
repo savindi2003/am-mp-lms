@@ -1,14 +1,20 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
+type Context = {
+  params: Promise<{
+    courseId: string;
+  }>;
+};
+
 export async function GET(
   _req: Request,
-  { params }: { params: { courseId: string } }
+  context: Context
 ) {
-  const courseId = Number(params.courseId);
+  const { courseId } = await context.params;
 
   const links = await prisma.courseLectureLink.findMany({
-    where: { classId: courseId },
+    where: { classId: Number(courseId) },
     orderBy: [{ lectureDate: "asc" }],
   });
 
