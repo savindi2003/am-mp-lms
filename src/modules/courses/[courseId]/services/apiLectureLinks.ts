@@ -1,10 +1,7 @@
 import type { CourseLectureLink } from "../types/typeLectureLink";
 
 export async function getLectureLinks(courseId: number) {
-  // const res = await fetch(
-  //   `/api/backend/admin/courses/${courseId}/lecture-links?mode=upcoming`
-  // );
-
+ 
   const res = await fetch(
     `/api/backend/courses/${courseId}/lecture-links?mode=upcoming`
   );

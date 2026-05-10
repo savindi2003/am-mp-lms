@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import InstructorYoutubeManager from "@/modules/instructor/youtube-videos/components/InstructorYoutubeManager";
 import CourseResourceManager from "@/modules/shared/components/CourseResourceManager";
 import InstructorLinkManage from "@/modules/instructor/lecture-links/components/InstructorLinkManager";
+import InstructorRecordingsManager from "@/modules/instructor/recordings/components/InstructorRecordingsManager";
 
 
 export default async function InstCourseVideosPage({
@@ -24,10 +25,16 @@ export default async function InstCourseVideosPage({
 
         <InstructorLinkManage courseId={courseId} />
 
-       
+
 
       </div>
-      
+
+      <div>
+        <h1 className="mb-4 text-2xl font-semibold">Recordings</h1>
+
+        <InstructorRecordingsManager courseId={courseId} />
+      </div>
+
       <div>
         <h1 className="mb-4 text-2xl font-semibold">Manage Resources</h1>
 

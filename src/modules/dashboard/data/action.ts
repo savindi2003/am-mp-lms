@@ -257,7 +257,7 @@ export async function getEnrollmentTrend(since?: Date) {
 // action.ts
 export async function getStudentById(id: number) {
   return prisma.student.findUnique({
-    where: { id },
+    where: { userId: id },
     include: {
       enrollments: {
         include: {

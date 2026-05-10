@@ -4,6 +4,7 @@ import { YoutubeManager } from "@/modules/admin/youtube-videos/components/Youtub
 import CourseResourceManager from "@/modules/shared/components/CourseResourceManager";
 import { LectureManager } from "@/modules/admin/lecture-links/components/LectureManager";
 import { prisma } from "@/lib/db";
+import { ClassRecordingManager } from "@/modules/admin/class-recordings/services/ClassRecordingManager";
 
 export const dynamic = "force-dynamic";
 
@@ -31,7 +32,7 @@ export default async function AdminCourseVideosPage({
   return (
     <section className="container flex flex-col gap-20">
       <div>
-        <h1 className="mb-4 text-2xl font-semibold">
+        <h1 className="mb-4 text-2xl font-semibold text-slate-800">
           Manage Lecture Session
         </h1>
 
@@ -42,7 +43,7 @@ export default async function AdminCourseVideosPage({
       </div>
 
       <div>
-        <h1 className="mb-4 text-3xl text-slate-800 font-semibold">
+        <h1 className="mb-4 text-2xl text-slate-800 font-semibold">
           Manage Resources
         </h1>
 
@@ -53,7 +54,15 @@ export default async function AdminCourseVideosPage({
       </div>
 
       <div>
-        <h1 className="mb-4 text-2xl font-semibold">
+      <h1 className="mb-4 text-2xl font-semibold text-slate-800">
+          Class Recodings
+        </h1>
+
+      <ClassRecordingManager courseId={courseId}/>
+    </div>
+
+      <div>
+        <h1 className="mb-4 text-2xl font-semibold text-slate-800">
           Manage Videos
         </h1>
 

@@ -12,6 +12,7 @@ import { CourseAbout } from "@/modules/courses/[courseId]/types/typeCourseAbout"
 import StudentLectureLinks from "@/modules/courses/[courseId]/components/StudentLectureLink";
 import { Button } from "@/modules/ui/button";
 import Link from "next/link";
+import StudentRecordings from "@/modules/courses/[courseId]/components/StudentRecordings";
 
 type PageProps = {
   params: Promise<{ courseId: string }>;
@@ -46,11 +47,11 @@ export default async function CourseVideosPage({ params }: PageProps) {
     description: course.description ?? null,
     instructor: course.instructor
       ? {
-          firstName: course.instructor.firstName,
-          lastName: course.instructor.lastName,
-          title: course.instructor.title,
-          user: { photo: course.instructor.user?.photo ?? null },
-        }
+        firstName: course.instructor.firstName,
+        lastName: course.instructor.lastName,
+        title: course.instructor.title,
+        user: { photo: course.instructor.user?.photo ?? null },
+      }
       : null,
   };
 
@@ -121,6 +122,21 @@ export default async function CourseVideosPage({ params }: PageProps) {
         <section className="p-6 bg-white">
           <h2 className="text-lg font-semibold">Active Time Table</h2>
           <StudentLectureLinks courseId={cId} />
+        </section>
+
+        {/* RECORDINGS */}
+        <section className="p-6 bg-white">
+          <h2 className="text-lg font-semibold">
+            Class Recordings
+          </h2>
+
+          {isStatusActive ? (
+            <StudentRecordings courseId={cId} />
+          ) : (
+            <p className="text-slate-500">
+              You have no permission to access recordings.
+            </p>
+          )}
         </section>
 
         {/* RESOURCES */}

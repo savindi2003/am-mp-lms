@@ -3,6 +3,7 @@ import CourseCardBox from "@/modules/home/components/CourseCardBox";
 import HomeNavBar from "@/modules/home/components/HomeNavBar";
 import { getCourses } from "@/modules/courses/data/action";
 import AboutUs from "@/modules/home/components/AboutUs";
+import FreeLectureList from "@/modules/home/components/FreeLectureList";
 
 export default async function HomePage() {
   const courses = await getCourses();
@@ -90,6 +91,10 @@ export default async function HomePage() {
           </div>
           <CourseCardBox courses={courseCardData} />
         </div>
+      </section>
+
+      <section id="free-classes" className="bg-slate-50 scroll-mt-24">
+          <FreeLectureList/>
       </section>
 
       {/* About Us */}
