@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
 import { getCourseVideosInitial } from "@/modules/courses/[courseId]/data/action";
 
+type Context = {
+  params: {
+    courseId: string;
+  };
+};
+
 export async function GET(
   _req: Request,
-  { params }: { params: { courseId: string } }
+  context: Context
 ) {
-  const courseId = Number(params.courseId);
+  const courseId = Number(context.params.courseId);
 
   const videos = await getCourseVideosInitial(courseId);
 
