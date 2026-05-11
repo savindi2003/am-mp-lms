@@ -17,7 +17,15 @@ export default function InstructorCourseCard({
   return (
     <div className="w-full max-w-md bg-white border border-slate-200 shadow-sm overflow-hidden hover:shadow-md transition">
       <Image
-        src={`/api/storage/image?key=${encodeURIComponent(course.photo ?? "")}`}
+
+        // src={`/api/storage/image?key=${encodeURIComponent(course.photo ?? "")}`}
+
+         src={
+    course.photo
+      ? `/api/storage/image?key=${encodeURIComponent(course.photo)}`
+      : "/default-class.jpg"
+  }
+
         alt="Course thumbnail"
         width={400}
         height={250}

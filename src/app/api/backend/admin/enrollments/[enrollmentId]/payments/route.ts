@@ -5,7 +5,7 @@ export async function GET(
   req: Request,
   { params }: { params: Promise<{ enrollmentId: string }> }
 ) {
-  const { enrollmentId } = await params; // ✅ FIX HERE
+  const { enrollmentId } = await params; // 
 
   const id = Number(enrollmentId);
 

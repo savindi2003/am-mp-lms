@@ -4,6 +4,7 @@ import HomeNavBar from "@/modules/home/components/HomeNavBar";
 import { getCourses } from "@/modules/courses/data/action";
 import AboutUs from "@/modules/home/components/AboutUs";
 import FreeLectureList from "@/modules/home/components/FreeLectureList";
+import FreeLectureSlider from "@/modules/home/components/FreeLectureSlider";
 
 export default async function HomePage() {
   const courses = await getCourses();
@@ -82,20 +83,18 @@ export default async function HomePage() {
       </section>
 
       {/* Courses */}
-      <section id="courses" className="bg-slate-50 scroll-mt-24">
+      {/* <section id="courses" className="bg-slate-50 scroll-mt-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid gap-6 md:grid-cols-[1fr,2fr,auto] items-start md:items-center mb-8">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-slate-800 mx-12">
-              Courses
+              Free Classes
             </h2>
           </div>
-          <CourseCardBox courses={courseCardData} />
-        </div>
-      </section>
+          
+           <FreeLectureSlider />;
 
-      <section id="free-classes" className="bg-slate-50 scroll-mt-24">
-          <FreeLectureList/>
-      </section>
+        </div>
+      </section> */}
 
       {/* About Us */}
       <section id="about" className="scroll-mt-24">

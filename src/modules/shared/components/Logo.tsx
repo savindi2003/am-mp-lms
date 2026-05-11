@@ -10,12 +10,12 @@ type LogoProps = {
 
 function Logo({ configStyles, logoUrl, linkUrl }: LogoProps) {
   return (
-    <div className={`w-[5rem] md:w-[5rem] ${configStyles}`}>
+    <div className={`w-[5rem] md:w-[10rem] ${configStyles}`}>
       <Link href={linkUrl || "/"}>
         <Image
           src={logoUrl || "/logo/logo.png"}
-          alt="Alpha Media Academy Logo"
-          width={70}
+          alt="Milan Pitagaldeniya"
+          width={150}
           height={60}
         />
       </Link>

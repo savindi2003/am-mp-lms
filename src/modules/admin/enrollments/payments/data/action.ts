@@ -4,17 +4,21 @@ export async function getAdminPayments(enrollmentId: number) {
   const enrollment = await prisma.enrollment.findUnique({
     where: { id: enrollmentId },
     select: {
+      studentId: true,
       enrollmentNumber: true,
     },
   });
 
+  if (!enrollment) {
+    return {
+      enrollment: null,
+      payments: [],
+    };
+  }
+
   const payments = await prisma.payment.findMany({
     where: {
-      paymentClasses: {
-        some: {
-          enrollmentId,
-        },
-      },
+      studentId: enrollment.studentId,
     },
     orderBy: {
       createdAt: "desc",

@@ -12,9 +12,17 @@ export default function StudentClassCard({
     <div className="w-full max-w-md bg-white border shadow-sm hover:shadow-md transition">
       <Link href={`/courses/${classData.id}/resources`}>
         <Image
-          src={`/api/storage/image?key=${encodeURIComponent(
-            classData.photo || ""
-          )}`}
+          // src={`/api/storage/image?key=${encodeURIComponent(
+          //   classData.photo || "/default-class.jpg"
+          // )}`}
+
+          src={
+            classData.photo
+              ? `/api/storage/image?key=${encodeURIComponent(classData.photo)}`
+              : "/default-class.jpg"
+          }
+
+
           alt="Class image"
           width={400}
           height={250}

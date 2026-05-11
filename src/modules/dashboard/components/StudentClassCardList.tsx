@@ -25,7 +25,7 @@ async function StudentClassCardList() {
   //     progress: denom ? Math.round((presentCount / denom) * 100) : 0,
   //     presentCount,
   //     denom,
-  //   };
+  //   };  
   // });
 
   const items = (student.enrollments ?? [])

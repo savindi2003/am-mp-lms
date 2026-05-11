@@ -4,7 +4,7 @@ import { auth } from "@/app/auth";
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { videoId: string } }
+  { params }: { params: Promise<{ courseId: string; videoId: string }> }
 ) {
   const session = await auth();
 
@@ -18,7 +18,7 @@ export async function DELETE(
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const { videoId: id } = params;
+  const { videoId: id } = await params;
 
   if (!id) {
     return NextResponse.json({ error: "Invalid ID" }, { status: 400 });

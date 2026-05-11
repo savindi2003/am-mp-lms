@@ -143,6 +143,36 @@ export default function NavBar({ user }: { user: CurrentUserDTO }) {
                   </NavigationMenuLink>
                 </NavigationMenuItem>
               )}
+              {isAdmin && (
+                <NavigationMenuItem>
+                  <NavigationMenuLink
+                    href="/admin/attendance"
+                    className="text-sm hover:rounded-none hover:text-yellow-400 hover:bg-transparent"
+                  >
+                    Attendance
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+              )}
+              {isAdmin && (
+                <NavigationMenuItem>
+                  <NavigationMenuLink
+                    href="/admin/access-controll"
+                    className="text-sm hover:rounded-none hover:text-yellow-400 hover:bg-transparent"
+                  >
+                    Access Control
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+              )}
+              {!isStudent && (
+                <NavigationMenuItem>
+                  <NavigationMenuLink
+                    href="/payment-history"
+                    className="text-sm hover:rounded-none hover:text-yellow-400 hover:bg-transparent"
+                  >
+                    Payments
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+              )}
             </NavigationMenuList>
           </NavigationMenu>
         </div>
@@ -217,14 +247,14 @@ export default function NavBar({ user }: { user: CurrentUserDTO }) {
                   </SheetClose>
                 </li>
 
-                {!isInstructor && (
+                {isStudent && (
                   <li>
                     <SheetClose asChild>
                       <Link
                         href="/payments"
                         className="block rounded-none px-1 py-2 text-sm text-slate-700 active:text-yellow-500"
                       >
-                        Payments
+                        Paymentsh
                       </Link>
                     </SheetClose>
                   </li>
@@ -241,6 +271,59 @@ export default function NavBar({ user }: { user: CurrentUserDTO }) {
                     </SheetClose>
                   </li>
                 )}
+
+                {isAdmin && (
+                  <li>
+                    <SheetClose asChild>
+                      <Link
+                        href="/admin/accounts"
+                        className="block rounded-none px-1 py-2 text-sm text-slate-700 active:text-yellow-500"
+                      >
+                        Attendance
+                      </Link>
+                    </SheetClose>
+                  </li>
+                )}
+
+                {isAdmin && (
+                  <li>
+                    <SheetClose asChild>
+                      <Link
+                        href="/admin/access-controll"
+                        className="block rounded-none px-1 py-2 text-sm text-slate-700 active:text-yellow-500"
+                      >
+                        Access Controll
+                      </Link>
+                    </SheetClose>
+                  </li>
+                )}
+
+                {isAdmin && (
+                  <li>
+                    <SheetClose asChild>
+                      <Link
+                        href="/admin/attendance"
+                        className="block rounded-none px-1 py-2 text-sm text-slate-700 active:text-yellow-500"
+                      >
+                        Attendance
+                      </Link>
+                    </SheetClose>
+                  </li>
+                )}
+
+                {!isStudent && (
+                  <li>
+                    <SheetClose asChild>
+                      <Link
+                        href="/payment-history"
+                        className="block rounded-none px-1 py-2 text-sm text-slate-700 active:text-yellow-500"
+                      >
+                        Payments
+                      </Link>
+                    </SheetClose>
+                  </li>
+                )}
+
                 <li className="pt-2">
                   <Modal>
                     <Modal.Open opens="signout">
