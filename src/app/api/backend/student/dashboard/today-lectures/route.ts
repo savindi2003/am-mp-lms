@@ -14,7 +14,7 @@ export async function GET(req: Request) {
             );
         }
 
-        // Today range
+        
         const today = new Date();
 
         const start = new Date(today);
@@ -23,7 +23,7 @@ export async function GET(req: Request) {
         const end = new Date(today);
         end.setHours(23, 59, 59, 999);
 
-        // Fetch lectures
+        
         const lectures = await prisma.courseLectureLink.findMany({
             where: {
                 lectureDate: {
@@ -31,12 +31,17 @@ export async function GET(req: Request) {
                     lte: end,
                 },
 
-                // Only active lectures
+                
+                toTime: {
+                    gte: new Date(),
+                },
+
+                
                 status: {
                     in: ["SCHEDULED", "LIVE"],
                 },
 
-                // Only enrolled student classes
+                
                 class: {
                     enrollments: {
                         some: {

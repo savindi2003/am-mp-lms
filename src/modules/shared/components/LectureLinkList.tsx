@@ -6,6 +6,8 @@ import { updateLectureStatus } from "@/modules/admin/lecture-links/services/apiL
 import toast from "react-hot-toast";
 import Modal from "@/modules/shared/components/Modal";
 import LectureUpdateForm from "@/modules/admin/lecture-links/components/LectureUpdateForm";
+import { cn } from "@/lib/utils";
+import { cva } from "class-variance-authority";
 
 export function LectureLinkList({
   links,
@@ -137,6 +139,10 @@ function MonthBlock({
         <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
           {grouped[month].map((lec: any) => {
             const isCancelled = lec.status === "CANCEL";
+            const isScheduled = lec.status === "SCHEDULED";
+            const isLive = lec.status === "LIVE";
+            const isCompleted = lec.status === "COMPLETED"
+            
 
             return (
           <li
@@ -167,14 +173,18 @@ function MonthBlock({
 
             {/* STATUS */}
             <div className="mt-3">
-              <span
-                className={`text-[10px] px-2 py-1 rounded-full ${
-                  isCancelled
-                    ? "bg-red-100 text-red-700"
-                    : "bg-green-100 text-green-700"
-                }`}
+              
+              <span className={cn(
+                "text-[10px] px-2 py-1 rounded-full",
+                isCancelled && "bg-gray-200 text-gray-500",
+                isScheduled && "bg-green-100 text-green-700",
+                isLive && "bg-red-100 text-red-600 animate-pulse",
+                isCompleted && "bg-gray-200 text-gray-500"
+              )}
               >
-                {isCancelled ? "Cancelled" : "Scheduled"}
+
+              
+                {lec.status}
               </span>
             </div>
 
@@ -186,8 +196,14 @@ function MonthBlock({
                 <Link
                   href={lec.meetingLink}
                   target="_blank"
-                  className="flex-1 text-center bg-green-600 text-white text-xs px-3 py-2 cursor-pointer"
-                >
+                  className={cn(
+                    "flex-1 text-center text-xs px-3 py-2 cursor-pointer",
+                    isLive && "bg-red-600 text-white",
+                    isScheduled && "bg-green-600 text-white",
+                    isCancelled && "bg-gray-300 text-gray-500",
+                    isCompleted && "bg-gray-300 text-gray-500"
+                  )}
+                 >
                   Join Class
                 </Link>
               )}

@@ -62,11 +62,13 @@ export default function ClassPerformanceCard({ classData }: any) {
           <p className="font-bold">{data.activeStudents}</p>
         </div>
 
+        
+      </div>
+      <div className="grid grid-cols-2 gap-2 text-sm pt-5">
         <div>
           <p>Enrollments</p>
           <p className="font-bold">{data.enrollments}</p>
         </div>
-
         <div>
           <p>Revenue</p>
           <p className="font-bold text-green-600">

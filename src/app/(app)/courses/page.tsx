@@ -8,6 +8,7 @@ import CreateCourseButton from "@/modules/courses/components/CreateCourseButton"
 import { getClassTypes } from "@/modules/courses/data/action";
 import CreateClassButton from "@/modules/courses/components/CreateClassButton";
 import ClassCardList from "@/modules/courses/components/ClassCardList";
+import FreeClasses from "@/modules/courses/components/FreeClasses";
 
 export default async function Page() {
   const session = await auth();
@@ -21,12 +22,12 @@ export default async function Page() {
       <h1 className="my-5 text-3xl text-slate-800 font-semibold">Courses</h1>
       {role === "ADMIN" && (
         <div className="ml-auto w-fit my-5">
-          {/* <CreateCourseButton instructors={instructors} /> */}
           <CreateClassButton instructors={instructors} />
+          <FreeClasses/>
+          
         </div>
       )}
       <Suspense fallback={<Spinner />}>
-        {/* <CourseCardList role={role} instructors={instructors} /> */}
         <ClassCardList role={role} classTypes={classTypes} />
         
       </Suspense>

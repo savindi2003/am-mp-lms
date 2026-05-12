@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db"; // Your prisma client instance
 import bcrypt from "bcryptjs";
+import { sendWelcomeEmail } from "@/lib/email";
 
 export async function POST(req: Request) {
   try {
@@ -56,6 +57,13 @@ export async function POST(req: Request) {
         },
       },
     });
+
+    try {
+  await sendWelcomeEmail(email, NIC, password);
+  console.log("Welcome email sent");
+} catch (mailError) {
+  console.log("Email send error:", mailError);
+}
 
     return NextResponse.json({ message: "Signup successful", userId: user.id });
 

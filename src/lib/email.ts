@@ -29,3 +29,40 @@ export async function sendPasswordResetEmail(to: string, url: string) {
     text: `Reset your password: ${url}`,
   });
 }
+
+
+export async function sendWelcomeEmail(
+  to: string,
+  nic: string,
+  password: string,
+) {
+  const transporter = createTransport();
+
+  await transporter.sendMail({
+    from: `LMS Support <${process.env.EMAIL_FROM}>`,
+    to,
+    subject: "Your LMS account has been created",
+    html: `
+      <div style="font-family:system-ui,Segoe UI,Arial;">
+        <h2>Welcome to LMS</h2>
+
+        <p>Your account has been created successfully.</p>
+
+        <div style="padding:12px;border:1px solid #ddd;border-radius:8px;">
+          <p><strong>Username (NIC):</strong> ${nic}</p>
+          <p><strong>Password:</strong> ${password}</p>
+        </div>
+
+        <p style="margin-top:16px;">
+          You can now login to the system.
+        </p>
+      </div>
+    `,
+    text: `
+Welcome to LMS
+
+Username (NIC): ${nic}
+Password: ${password}
+    `,
+  });
+}

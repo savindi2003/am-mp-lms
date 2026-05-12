@@ -13,9 +13,13 @@ import { useCreateClass } from "../hooks/useCreateClass";
 import { Button } from "@/modules/ui/button";
 import { generateMonths } from "../utils/months";
 import { useClassTypes } from "../hooks/useClassTypes";
+import { useRouter } from "next/navigation";
 
-export default function CreateClassForm({ instructors }: any) {
-  
+export default function CreateClassForm({
+  instructors,
+  onCloseModal,
+}: any) {
+
   const {
     register,
     handleSubmit,
@@ -26,13 +30,23 @@ export default function CreateClassForm({ instructors }: any) {
     resolver: zodResolver(createClassSchema),
   });
 
+  const router = useRouter();
   const { loading, handleCreate } = useCreateClass();
   const months = generateMonths();
   const { types, loading: classTypesLoading } = useClassTypes();
 
   const onSubmit = async (data: any) => {
     console.log("SUBMIT:", data);
-    await handleCreate(data);
+    const success = await handleCreate(data);
+
+    if (success) {
+
+      reset();
+
+      onCloseModal?.();
+
+      router.refresh();
+    }
   };
 
 
@@ -42,7 +56,7 @@ export default function CreateClassForm({ instructors }: any) {
       <label className="text-slate-700 font-semibold">Create Class</label>
 
       <form
-        className="space-y-1 w-[min(100%,36rem)] grid grid-cols-2 gap-x-10 mt-5"
+        className="space-y-1 w-[min(100%,40rem)] mt-5"
         onSubmit={handleSubmit(onSubmit)}
       >
 
@@ -94,7 +108,8 @@ export default function CreateClassForm({ instructors }: any) {
             type="number"
             {...register("classFee")}
           />
-         
+
+
         </div>
 
         {/* tITLE */}
@@ -109,7 +124,7 @@ export default function CreateClassForm({ instructors }: any) {
             className="w-full border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-slate-500"
             {...register("description")}
           />
-           {errors.description && (
+          {errors.description && (
             <p className="text-red-500 text-sm mt-1">
               {errors.description.message as string}
             </p>

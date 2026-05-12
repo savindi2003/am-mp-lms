@@ -19,7 +19,7 @@ export default function InstructorLinkManage({
     <div>
       
 
-      {/* UI LIST COMPONENT */}
+      
       <LectureLinkList links={links} />
     </div>
   );

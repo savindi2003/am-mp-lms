@@ -22,9 +22,9 @@ export default function Stats({ stats }: { stats: DashboardStats }) {
   const { students, dueExpires, sales, totalEnrollments, payRate } = stats;
 
   return (
-    <div className="md:flex md:justify-between">
+    <div className="grid grid-cols-2 gap-4 md:flex md:justify-between">
       <Stat
-        title="Students"
+        title="Students" 
         icon={
           <PiStudentThin
             className="h-10 w-10 rounded-full bg-sky-200 p-2 text-slate-800 md:h-15 md:w-15 md:p-3"

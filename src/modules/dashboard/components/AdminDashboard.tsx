@@ -34,7 +34,7 @@ export default async function AdminDashboard({ last = 7 }: { last?: number }) {
 
       
       {/* 4. CLASS TYPE CHART (REPLACED COURSE CHART) */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-center md:justify-between items-center">
         <ClassTypeChart enrollments={enrollments} />
         <EnrollmentsBarChart enrollments={enrollments} />
       </div>
