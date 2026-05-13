@@ -39,30 +39,223 @@ export async function sendWelcomeEmail(
   const transporter = createTransport();
 
   await transporter.sendMail({
-    from: `LMS Support <${process.env.EMAIL_FROM}>`,
-    to,
-    subject: "Your LMS account has been created",
-    html: `
-      <div style="font-family:system-ui,Segoe UI,Arial;">
-        <h2>Welcome to LMS</h2>
+  from: `LMS Support <${process.env.EMAIL_FROM}>`,
+  to,
+  subject: "Your LMS account has been created",
+  html: `
+  <div style="
+    margin:0;
+    padding:0;
+    background:#f5f7fb;
+    font-family:Arial,Helvetica,sans-serif;
+  ">
+    <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 16px;">
+      <tr>
+        <td align="center">
 
-        <p>Your account has been created successfully.</p>
+          <table width="600" cellpadding="0" cellspacing="0" style="
+            background:#ffffff;
+            border-radius:18px;
+            overflow:hidden;
+            box-shadow:0 10px 30px rgba(0,0,0,0.08);
+          ">
 
-        <div style="padding:12px;border:1px solid #ddd;border-radius:8px;">
-          <p><strong>Username (NIC):</strong> ${nic}</p>
-          <p><strong>Password:</strong> ${password}</p>
-        </div>
+            <!-- HEADER -->
+            <tr>
+              <td style="
+                background:#0f172a;
+                padding:32px 40px;
+                text-align:center;
+              ">
+                <h1 style="
+                  margin:0;
+                  color:#ffffff;
+                  font-size:30px;
+                  font-weight:700;
+                  letter-spacing:0.5px;
+                ">
+                  Welcome to LMS
+                </h1>
 
-        <p style="margin-top:16px;">
-          You can now login to the system.
-        </p>
-      </div>
-    `,
-    text: `
+                <p style="
+                  margin-top:10px;
+                  color:#cbd5e1;
+                  font-size:15px;
+                  line-height:24px;
+                ">
+                  Your learning journey starts here
+                </p>
+              </td>
+            </tr>
+
+            <!-- BODY -->
+            <tr>
+              <td style="padding:40px;">
+
+                <p style="
+                  margin:0 0 18px;
+                  color:#0f172a;
+                  font-size:16px;
+                  line-height:28px;
+                ">
+                  Hello,
+                </p>
+
+                <p style="
+                  margin:0 0 30px;
+                  color:#475569;
+                  font-size:15px;
+                  line-height:28px;
+                ">
+                  Your LMS account has been successfully created. 
+                  Use the credentials below to access your student portal.
+                </p>
+
+                <!-- LOGIN BOX -->
+                <table width="100%" cellpadding="0" cellspacing="0" style="
+                  border:1px solid #e2e8f0;
+                  background:#f8fafc;
+                  margin-bottom:30px;
+                ">
+                  <tr>
+                    <td style="padding:28px;">
+
+                      <p style="
+                        margin:0 0 14px;
+                        color:#64748b;
+                        font-size:13px;
+                        text-transform:uppercase;
+                        letter-spacing:1px;
+                        font-weight:700;
+                      ">
+                        Login Credentials
+                      </p>
+
+                      <div style="margin-bottom:18px;">
+                        <p style="
+                          margin:0 0 6px;
+                          color:#94a3b8;
+                          font-size:13px;
+                        ">
+                          Username (NIC)
+                        </p>
+
+                        <p style="
+                          margin:0;
+                          color:#0f172a;
+                          font-size:18px;
+                          font-weight:700;
+                        ">
+                          ${nic}
+                        </p>
+                      </div>
+
+                      <div>
+                        <p style="
+                          margin:0 0 6px;
+                          color:#94a3b8;
+                          font-size:13px;
+                        ">
+                          Password
+                        </p>
+
+                        <p style="
+                          margin:0;
+                          color:#0f172a;
+                          font-size:18px;
+                          font-weight:700;
+                          letter-spacing:1px;
+                        ">
+                          ${password}
+                        </p>
+                      </div>
+
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- BUTTON -->
+                <table cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
+                  <tr>
+                    <td align="center" bgcolor="#eab308">
+                      <a href="${process.env.NEXT_PUBLIC_APP_URL}"
+                        style="
+                          display:inline-block;
+                          padding:14px 30px;
+                          color:#0f172a;
+                          font-size:15px;
+                          font-weight:700;
+                          text-decoration:none;
+                        ">
+                        Log In
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- NOTICE -->
+                <div style="
+                  background:#fff7ed;
+                  border:1px solid #fed7aa;
+                  padding:18px;
+                ">
+                  <p style="
+                    margin:0;
+                    color:#9a3412;
+                    font-size:14px;
+                    line-height:24px;
+                  ">
+                    For security purposes, please change your password after your first login.
+                  </p>
+                </div>
+
+              </td>
+            </tr>
+
+            <!-- FOOTER -->
+            <tr>
+              <td style="
+                border-top:1px solid #e2e8f0;
+                padding:24px 40px;
+                text-align:center;
+                background:#f8fafc;
+              ">
+                <p style="
+                  margin:0;
+                  color:#64748b;
+                  font-size:13px;
+                  line-height:22px;
+                ">
+                  LMS Student Management System
+                </p>
+
+                <p style="
+                  margin:8px 0 0;
+                  color:#94a3b8;
+                  font-size:12px;
+                ">
+                  © ${new Date().getFullYear()} LMS. All rights reserved.
+                </p>
+              </td>
+            </tr>
+
+          </table>
+
+        </td>
+      </tr>
+    </table>
+  </div>
+  `,
+  text: `
 Welcome to LMS
+
+Your account has been created successfully.
 
 Username (NIC): ${nic}
 Password: ${password}
-    `,
-  });
+
+Login here:
+${process.env.NEXT_PUBLIC_APP_URL}
+  `,
+});
 }

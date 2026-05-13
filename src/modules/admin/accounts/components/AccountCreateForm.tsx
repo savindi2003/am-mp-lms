@@ -12,7 +12,13 @@ import {
 } from "@/modules/admin/accounts/validators/createAccountSchema";
 import toast from "react-hot-toast";
 
-type CreateState = { ok?: boolean; id?: number; error?: string };
+type CreateState = {
+  ok?: boolean;
+  id?: number;
+  error?: string;
+  emailSent?: boolean;
+};
+
 const initial: CreateState = {};
 
 const DEFAULTS: CreateAccountFormData = {
@@ -57,14 +63,33 @@ export default function AccountCreateForm({
 
   // Reset after successful create
   useEffect(() => {
-    if (state?.ok && state.id) {
-      reset(DEFAULTS);
-      clearErrors();
-      toast.success("Account created successfully");
-      onCloseModal?.();
+  if (state?.ok && state.id) {
+    reset(DEFAULTS);
+    clearErrors();
+
+    toast.success("Account created successfully");
+
+    if (state.emailSent) {
+      toast.success("Verification email sent successfully");
+    } else {
+      toast.error("Account created, but email failed");
     }
-    if (state?.error) toast.error(state.error);
-  }, [state?.ok, state?.error, state?.id, reset, clearErrors]);
+
+    onCloseModal?.();
+  }
+
+  if (state?.error) {
+    toast.error(state.error);
+  }
+}, [
+  state?.ok,
+  state?.error,
+  state?.id,
+  state?.emailSent,
+  reset,
+  clearErrors,
+  onCloseModal,
+]);
 
   const onSubmit = (values: CreateAccountFormData) => {
     const fd = new FormData();

@@ -9,6 +9,7 @@ import { updateAccountSchema } from "@/modules/admin/accounts/validators/updateA
 import { resetPasswordSchema } from "@/modules/admin/accounts/validators/resetPasswordSchema";
 import { createAccountSchema } from "@/modules/admin/accounts/validators/createAccountSchema";
 import { Gender, Role } from "@prisma/client";
+import { sendWelcomeEmail } from "@/lib/email";
 
 const PAGE_SIZE = Number(process.env.NEXT_PUBLIC_PAGE_SIZE!);
 
@@ -18,7 +19,12 @@ async function assertAdmin() {
   // if ((session.user as any).role !== "ADMIN") throw new Error("Forbidden");
 }
 
-type CreateState = { ok?: boolean; id?: number; error?: string };
+type CreateState = {
+  ok?: boolean;
+  id?: number;
+  error?: string;
+  emailSent?: boolean;
+};
 
 export async function createAccount(
   prev: CreateState,
@@ -65,44 +71,56 @@ export async function createAccount(
         hashedPassword,
         ...(input.role === "ADMIN"
           ? {
-              admin: {
+            admin: {
+              create: {
+                firstName: input.firstName,
+                lastName: input.lastName,
+              },
+            },
+          }
+          : input.role === "INSTRUCTOR"
+            ? {
+              instructor: {
                 create: {
                   firstName: input.firstName,
                   lastName: input.lastName,
+                  title: input.title ?? "",
                 },
               },
             }
-          : input.role === "INSTRUCTOR"
-            ? {
-                instructor: {
-                  create: {
-                    firstName: input.firstName,
-                    lastName: input.lastName,
-                    title: input.title ?? "",
-                  },
-                },
-              }
             : {
-                student: {
-                  create: {
-                    firstName: input.firstName,
-                    lastName: input.lastName,
-                    contactNo: input.contactNo!,
-                    address: input.address!,
-                    dob: new Date(input.dob!),
-                    gender: input.gender as Gender,
-                    guardianContactNo: input.guardianContactNo!,
-                    guardianFirstName: input.guardianFirstName!,
-                    guardianLastName: input.guardianLastName!,
-                  },
+              student: {
+                create: {
+                  firstName: input.firstName,
+                  lastName: input.lastName,
+                  contactNo: input.contactNo!,
+                  address: input.address!,
+                  dob: new Date(input.dob!),
+                  gender: input.gender as Gender,
+                  guardianContactNo: input.guardianContactNo!,
+                  guardianFirstName: input.guardianFirstName!,
+                  guardianLastName: input.guardianLastName!,
                 },
-              }),
+              },
+            }),
       },
       select: { id: true },
     });
 
+    let emailSent = false;
+
+    try {
+      await sendWelcomeEmail(input.email, input.NIC, input.password);
+      emailSent = true;
+    } catch (mailError) {
+      console.log("Email send error:", mailError);
+    }
     revalidatePath("/admin/accounts");
-    return { ok: true, id: user.id };
+    return {
+      ok: true,
+      id: user.id,
+      emailSent,
+    };
   } catch (e) {
     return { error: "Failed to create account" };
   }
@@ -143,15 +161,15 @@ export async function updateAccount(form: FormData) {
   const [emailTaken, nicTaken] = await Promise.all([
     input.email
       ? prisma.user.findFirst({
-          where: { email: String(input.email), id: { not: input.userId } },
-          select: { id: true },
-        })
+        where: { email: String(input.email), id: { not: input.userId } },
+        select: { id: true },
+      })
       : null,
     input.NIC
       ? prisma.user.findFirst({
-          where: { NIC: String(input.NIC), id: { not: input.userId } },
-          select: { id: true },
-        })
+        where: { NIC: String(input.NIC), id: { not: input.userId } },
+        select: { id: true },
+      })
       : null,
   ]);
 
