@@ -19,8 +19,8 @@ function fmtBytes(n?: number | null) {
   let i = 0,
     v = n;
   while (v >= 1024 && i < units.length - 1) {
-      v /= 1024;
-      i++;
+    v /= 1024;
+    i++;
   }
   return `${v.toFixed(1)} ${units[i]}`;
 }
@@ -71,14 +71,17 @@ export default function CourseResourceList({
   const getAccess = (month: string) => {
     const record = accessMap?.[month];
 
+    // Paid or manually overridden
     if (record?.status === "PAID" || record?.status === "OVERRIDDEN") {
       return { locked: false };
     }
 
+    // Current month always open
     if (month === currentMonth) {
-      return { locked: !isFirstWeek() };
+      return { locked: false };
     }
 
+    // Everything else locked
     return { locked: true };
   };
 
@@ -173,84 +176,84 @@ function MonthBlock({
       {isOpen &&
         (access.locked ? (
           <div className="p-5 text-center text-sm text-gray-500 space-y-2">
-              <p>🔒 This content is locked for this month.</p>
-              <p>
-                If you’ve already paid, access will be activated soon. Otherwise, please complete your payment to unlock lectures.
-              </p>
+            <p>🔒 This content is locked for this month.</p>
+            <p>
+              If you’ve already paid, access will be activated soon. Otherwise, please complete your payment to unlock lectures.
+            </p>
 
-              <button className="text-blue-600 underline text-xs">
-                Contact Support
-              </button>
-            </div>
+            <button className="text-blue-600 underline text-xs">
+              Contact Support
+            </button>
+          </div>
         ) : (
           <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 p-4">
             {items.map((r: CourseResourceRow) => {
-            const isImg = (r.contentType ?? "").startsWith("image/");
+              const isImg = (r.contentType ?? "").startsWith("image/");
 
-            return (
-              <li key={r.id} className="border p-3 bg-white shadow-sm">
-                <div className="flex items-start gap-3">
-                  <div className="h-16 w-16 bg-slate-100 flex items-center justify-center overflow-hidden">
-                    {isImg ? (
-                      <Image
-                        src={openUrl(r.s3Key)}
-                        alt={r.title}
-                        width={64}
-                        height={64}
-                        className="object-cover"
-                        unoptimized
-                      />
-                    ) : (
-                      <span className="text-xs text-slate-500">
-                        {(r.contentType ?? "file").split("/").pop()}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="min-w-0">
-                    <div className="font-medium text-sm truncate">
-                      {r.title}
-                    </div>
-
-                    <div className="text-xs text-slate-500">
-                      {fmtBytes(r.sizeBytes)} ·{" "}
-                      {format(new Date(r.createdAt), "PPpp")}
-                    </div>
-
-                    <div className="mt-2 flex gap-2">
-                      <Link
-                        href={openUrl(r.s3Key)}
-                        target="_blank"
-                        className="bg-slate-800 text-white text-xs px-2 py-1"
-                      >
-                        Open
-                      </Link>
-
-                      <Link
-                        href={downloadUrl(r.s3Key, r.title)}
-                        className="border text-xs px-2 py-1"
-                      >
-                        Download
-                      </Link>
-
-                      {isDeleteButton && (
-                        <button
-                          onClick={async () => {
-                            await deleteCourseResource(r.id);
-                            await onGetCourseResources();
-                          }}
-                          className="bg-red-600 text-white text-xs px-2 py-1"
-                        >
-                          Delete
-                        </button>
+              return (
+                <li key={r.id} className="border p-3 bg-white shadow-sm">
+                  <div className="flex items-start gap-3">
+                    <div className="h-16 w-16 bg-slate-100 flex items-center justify-center overflow-hidden">
+                      {isImg ? (
+                        <Image
+                          src={openUrl(r.s3Key)}
+                          alt={r.title}
+                          width={64}
+                          height={64}
+                          className="object-cover"
+                          unoptimized
+                        />
+                      ) : (
+                        <span className="text-xs text-slate-500">
+                          {(r.contentType ?? "file").split("/").pop()}
+                        </span>
                       )}
                     </div>
+
+                    <div className="min-w-0">
+                      <div className="font-medium text-sm truncate">
+                        {r.title}
+                      </div>
+
+                      <div className="text-xs text-slate-500">
+                        {fmtBytes(r.sizeBytes)} ·{" "}
+                        {format(new Date(r.createdAt), "PPpp")}
+                      </div>
+
+                      <div className="mt-2 flex gap-2">
+                        <Link
+                          href={openUrl(r.s3Key)}
+                          target="_blank"
+                          className="bg-slate-800 text-white text-xs px-2 py-1"
+                        >
+                          Open
+                        </Link>
+
+                        <Link
+                          href={downloadUrl(r.s3Key, r.title)}
+                          className="border text-xs px-2 py-1"
+                        >
+                          Download
+                        </Link>
+
+                        {isDeleteButton && (
+                          <button
+                            onClick={async () => {
+                              await deleteCourseResource(r.id);
+                              await onGetCourseResources();
+                            }}
+                            className="bg-red-600 text-white text-xs px-2 py-1"
+                          >
+                            Delete
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </li>
-            );
-          })}
-            
+                </li>
+              );
+            })}
+
           </ul>
         ))}
     </div>

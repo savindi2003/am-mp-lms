@@ -43,7 +43,7 @@ function CourseResourceManager({
           className="flex items-center justify-between cursor-pointer bg-slate-200 hover:bg-slate-300 px-4 py-2 transition"
         >
           <h2 className="text-sm font-semibold text-gray-700">
-            View Course Resources
+            View Course Resources admin
           </h2>
 
           <span className="text-lg">
@@ -54,7 +54,7 @@ function CourseResourceManager({
 
       {/* ONLY LIST is collapsible */}
       {showList && (isAdmin || isStudentEnrolled) && (
-        <CourseResourceList
+        <InstrutorCourseResourceList
           courseId={courseId}
           items={items}
           onGetCourseResources={getCourseResources}
