@@ -12,6 +12,8 @@ async function StudentDashboard() {
   }
 
   const studentId = Number(session.user.id);
+  
+
 
   return (
     <div>

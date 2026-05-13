@@ -11,6 +11,8 @@ export default function StudentTodayLectureCards({ userId }: { userId: number })
     const [lectures, setLectures] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
 
+    
+
     const loadLectures = async () => {
         try {
             setLoading(true);
