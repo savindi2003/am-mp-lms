@@ -5,6 +5,7 @@ export async function saveCourseResourceKey(
     title?: string;
     contentType?: string;
     sizeBytes?: number;
+    month?:string;
   },
 ) {
   const res = await fetch(`/api/backend/admin/courses/${courseId}/resources`, {

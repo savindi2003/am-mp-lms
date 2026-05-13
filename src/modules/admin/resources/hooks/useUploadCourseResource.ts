@@ -31,6 +31,7 @@ function buildOpenUrl(key: string) {
 
 type UploadOptions = {
   title?: string;
+  month?: string;
 };
 
 export function useUploadCourseResource(courseId: number) {
@@ -73,6 +74,9 @@ export function useUploadCourseResource(courseId: number) {
         title: opts?.title ?? file.name,
         contentType: file.type,
         sizeBytes: file.size,
+        month: opts?.month,
+        
+        
       });
 
       // preview for images

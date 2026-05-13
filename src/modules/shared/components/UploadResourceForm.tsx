@@ -17,6 +17,7 @@ type Props = {
   onGetCourseResources: () => Promise<void>;
 };
 
+
 // build schema inside the client component to avoid SSR pitfalls
 
 export default function UploadResourceForm({
@@ -48,7 +49,10 @@ export default function UploadResourceForm({
     setError(null);
     const file: File = values.file[0]; // guaranteed by schema refine
     try {
-      const res = await uploadAndSave(file, { title: values.title });
+      const res = await uploadAndSave(file, {
+        title: values.title,
+        month: values.month,
+      });
       onUploaded?.(res);
       // reset title; to clear file input, reset entire form (keeps it simple)
       reset({ title: "" });
@@ -79,7 +83,7 @@ export default function UploadResourceForm({
         )}
       </div>
 
-       <div>
+      <div>
         <label className="block text-sm font-medium text-slate-800 mb-1">
           Access Month
         </label>
