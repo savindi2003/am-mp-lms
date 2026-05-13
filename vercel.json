@@ -2,7 +2,7 @@
     "crons": [
         {
             "path": "/api/cron/lecture-status",
-            "schedule":"/5 * * * *"
+            "schedule":"*/5 * * * *"
         }
     ]
 }
