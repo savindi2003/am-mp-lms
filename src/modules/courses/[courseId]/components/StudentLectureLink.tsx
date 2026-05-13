@@ -16,7 +16,7 @@ export default function StudentLectureLinks({
 }) {
   const { links, accessMap, loading, error } = useLectureLinks(courseId);
 
-  
+
   const [showHistory, setShowHistory] = useState(false);
 
   const currentMonth = new Date().toISOString().slice(0, 7);
@@ -63,13 +63,13 @@ export default function StudentLectureLinks({
     const isCurrent = month === currentMonth;
 
     return (
-     <div
-            key={month}
-            className={cn(
-              "space-y-4 mt-5",
-              isCurrent ? "border-green-500" : "bg-white"
-            )}
-          >
+      <div
+        key={month}
+        className={cn(
+          "space-y-4 mt-5",
+          isCurrent ? "border-green-500" : "bg-white"
+        )}
+      >
         {/* HEADER */}
         <div
           onClick={() => setOpenMonth(isOpen ? "" : month)}
@@ -102,44 +102,55 @@ export default function StudentLectureLinks({
               </button>
             </div>
           ) : (
-             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-                {grouped[month].map((lec: any) => {
-                  const isLive = lec.status === "LIVE";
-                  const isScheduled = lec.status === "SCHEDULED";
-                  const isCancelled = lec.status === "CANCEL";
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+              {grouped[month].map((lec: any) => {
+                const isLive = lec.status === "LIVE";
+                const isScheduled = lec.status === "SCHEDULED";
+                const isCancelled = lec.status === "CANCEL";
 
-                  return (
-                    <li
-                      key={lec.id}
-                      className={cn(
-                        "bg-white border shadow-sm p-4 relative",
-                        isCancelled && "opacity-60"
-                      )}
-                    >
-                      {/* STATUS BADGE */}
-                      <div className="absolute top-3 right-3">
-                        <span
-                          className={cn(
-                            "text-[10px] px-2 py-1 rounded-full font-semibold",
-                            isLive && "bg-red-100 text-red-600 animate-pulse",
-                            isScheduled && "bg-yellow-100 text-yellow-700",
-                            lec.status === "COMPLETED" &&
-                              "bg-green-100 text-green-700",
-                            isCancelled && "bg-gray-200 text-gray-500"
-                          )}
-                        >
-                          {lec.status}
-                        </span>
+                return (
+                  <li
+                    key={lec.id}
+                    className={cn(
+                      "bg-white border shadow-sm p-4 relative",
+                      isCancelled && "opacity-60"
+                    )}
+                  >
+                    {/* STATUS BADGE */}
+                    <div className="flex justify-end mb-3">
+                      <span
+                        className={cn(
+                          "text-[10px] px-2 py-1 rounded-full font-semibold",
+                          isLive && "bg-red-100 text-red-600 animate-pulse",
+                          isScheduled && "bg-yellow-100 text-yellow-700",
+                          lec.status === "COMPLETED" &&
+                          "bg-green-100 text-green-700",
+                          isCancelled && "bg-gray-200 text-gray-500"
+                        )}
+                      >
+                        {lec.status}
+                      </span>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+
+                      {/* ICON */}
+                      <div className="h-12 w-12 sm:h-14 sm:w-14 rounded-lg bg-slate-100 flex items-center justify-center shrink-0 overflow-hidden">
+                        <img
+                          src="/meet.png"
+                          alt="Google Meet"
+                          className="h-6 w-6 sm:h-7 sm:w-7 object-contain"
+                        />
                       </div>
 
                       {/* INFO */}
-                      <div>
-                        <h3 className="font-semibold text-sm">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-sm truncate">
                           {lec.title}
                         </h3>
 
                         <p className="text-xs text-slate-500 mt-1">
-                          📅 {format(new Date(lec.lectureDate), "PPP")}
+                          📅 {format(new Date(lec.lectureDate), "dd MMM yyyy")}
                         </p>
 
                         <p className="text-xs text-slate-500">
@@ -147,38 +158,39 @@ export default function StudentLectureLinks({
                           {format(new Date(lec.toTime), "hh:mm a")}
                         </p>
                       </div>
+                    </div>
 
-                      {/* JOIN BUTTON */}
-                      <div className="mt-4">
-                        <Link href={lec.meetingLink} target="_blank">
-                          <button
-                            disabled={isCancelled}
-                            className={cn(
-                              "w-full text-xs py-2 font-medium",
-                              isLive &&
-                                "bg-red-600 text-white",
-                              isScheduled &&
-                                "bg-green-600 text-white",
-                              lec.status === "COMPLETED" &&
-                                "bg-slate-200 text-slate-600",
-                              isCancelled &&
-                                "bg-gray-300 text-gray-500 cursor-not-allowed"
-                            )}
-                          >
-                            {isLive
-                              ? "Join LIVE 🔴"
-                              : isScheduled
+                    {/* JOIN BUTTON */}
+                    <div className="mt-4">
+                      <Link href={lec.meetingLink} target="_blank">
+                        <button
+                          disabled={isCancelled}
+                          className={cn(
+                            "w-full text-xs py-2 font-medium",
+                            isLive &&
+                            "bg-red-600 text-white",
+                            isScheduled &&
+                            "bg-green-600 text-white",
+                            lec.status === "COMPLETED" &&
+                            "bg-slate-200 text-slate-600",
+                            isCancelled &&
+                            "bg-gray-300 text-gray-500 cursor-not-allowed"
+                          )}
+                        >
+                          {isLive
+                            ? "Join LIVE 🔴"
+                            : isScheduled
                               ? "Join Lecture"
                               : lec.status === "COMPLETED"
-                              ? "Completed"
-                              : "Cancelled"}
-                          </button>
-                        </Link>
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
+                                ? "Completed"
+                                : "Cancelled"}
+                        </button>
+                      </Link>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
           ))}
       </div>
     );
@@ -194,7 +206,7 @@ export default function StudentLectureLinks({
         </div>
       )}
 
-       {/* SHOW HISTORY BUTTON (same style as resources) */}
+      {/* SHOW HISTORY BUTTON (same style as resources) */}
       {pastMonths.length > 0 && (
         <div className="flex justify-end">
           <button
@@ -206,12 +218,14 @@ export default function StudentLectureLinks({
         </div>
       )}
 
-      
+
 
       {/* ACTIVE MONTHS */}
       {activeMonths.map(renderMonth)}
 
-     
+
     </div>
   );
 }
+
+//me lecture link card ekata podi image ekak add wenna one. eka responsive gelapena vidiyata mekata add karanna
