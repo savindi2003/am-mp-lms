@@ -1,4 +1,4 @@
-import { FaFacebook, FaInstagram, FaTiktok, FaTwitter } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaTiktok, FaYoutube , FaLinkedin } from "react-icons/fa";
 
 function Footer() {
   const year = new Date().getFullYear();
@@ -8,15 +8,15 @@ function Footer() {
       <div className="mx-auto max-w-6xl py-10 grid grid-cols-1 gap-8 md:grid-cols-2">
         {/* Brand + Social */}
         <div>
-          <h3 className="text-xl font-bold">Alpha Media Academy</h3>
+          <h3 className="text-xl font-bold">Milan Pitagaldeniya</h3>
           <p className="mt-2 text-sm text-slate-600">
-            Learn. Build. Get hired.
+            Learn. Practice. Achieve.
           </p>
 
           <div className="mt-4 flex items-center gap-4">
             <a
               aria-label="Facebook"
-              href="#"
+              href="https://www.facebook.com/milanpitagaldeniyascience"
               target="_blank"
               rel="noreferrer"
               className="transition hover:opacity-75"
@@ -25,7 +25,7 @@ function Footer() {
             </a>
             <a
               aria-label="Instagram"
-              href="#"
+              href="https://www.instagram.com/sciencewithmilan/"
               target="_blank"
               rel="noreferrer"
               className="transition hover:opacity-75"
@@ -33,23 +33,33 @@ function Footer() {
               <FaInstagram size={20} />
             </a>
             <a
-              aria-label="Twitter"
-              href="#"
+              aria-label="Youtube"
+              href=" https://www.youtube.com/@sciencewithmilan"
               target="_blank"
               rel="noreferrer"
               className="transition hover:opacity-75"
             >
-              <FaTwitter size={20} />
+              <FaYoutube size={20} />
             </a>
 
             <a
               aria-label="TikTok"
-              href="#"
+              href="https://www.tiktok.com/@milan_science"
               target="_blank"
               rel="noreferrer"
               className="transition hover:opacity-75"
             >
               <FaTiktok size={20} />
+            </a>
+
+            <a
+              aria-label="LinkedIn"
+              href="https://linkedin.com/company/science-with-milan"
+              target="_blank"
+              rel="noreferrer"
+              className="transition hover:opacity-75"
+            >
+              <FaLinkedin size={20} />
             </a>
           </div>
         </div>
@@ -63,7 +73,7 @@ function Footer() {
             <li>
               <span className="text-slate-500">Call:</span>{" "}
               <a href="tel:+94123456789" className="hover:opacity-75">
-                +94 12 345 6789
+                +94 11 123 4567
               </a>
             </li>
             <li>

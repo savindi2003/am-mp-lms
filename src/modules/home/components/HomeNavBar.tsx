@@ -39,7 +39,7 @@ export default function HomeNavBar() {
   }
 
   return (
-    <header className="w-full bg-yellow-400">
+    <header className="w-full">
       <div className="container mx-auto flex items-center justify-between px-4 py-3">
         <div>
           <Logo />

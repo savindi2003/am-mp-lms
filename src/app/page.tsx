@@ -45,8 +45,8 @@ export default async function HomePage() {
             </div>
             <div className="order-2 md:order-2 text-center md:text-left mb-5">
               <h1 className="text-2xl sm:text-4xl lg:text-6xl font-bold text-slate-800 leading-tight">
-                Discover New Skills Today, Create Endless Possibilities
-                Tomorrow{" "}
+                Discover, Learn, and Master Science with
+                Ease{" "}
               </h1>
             </div>
           </div>
@@ -58,11 +58,15 @@ export default async function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           <div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-slate-700 mb-4">
-              Boost your knowledge and have fun doing it.
+              Your Pathway to A Grade Success in Science
             </h2>
             <p className="text-slate-700 text-sm sm:text-base mb-4">
-              From your first click to your biggest achievement, we believe
-              every learner deserves a gentle path to growth
+              Join engaging live classes designed to make science simple and enjoyable.
+              Master every concept with theory lessons, focused revision, and in-depth paper discussions all in one place.
+              <br /><br />
+              Never miss a lesson with unlimited access to recorded sessions 📚
+              <br /><br />
+              Strengthen your understanding with past papers and MCQ practice, and steadily build your knowledge to reach excellence in Science 🚀
             </p>
             {/*<Button className="cursor-pointer text-base sm:text-lg">*/}
             {/*  See More*/}
@@ -83,23 +87,16 @@ export default async function HomePage() {
       </section>
 
       {/* Courses */}
-      {/* <section id="courses" className="bg-slate-50 scroll-mt-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
-          <div className="grid gap-6 md:grid-cols-[1fr,2fr,auto] items-start md:items-center mb-8">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-slate-800 mx-12">
-              Free Classes
-            </h2>
-          </div>
+      <section id="courses" className="bg-slate-50 scroll-mt-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
           
-           <FreeLectureSlider />;
+          
+           <FreeLectureSlider />
 
         </div>
-      </section> */}
-
-      {/* About Us */}
-      <section id="about" className="scroll-mt-24">
-        <AboutUs />
       </section>
+
+      
 
       {/* Contact (simple in-page section to scroll to) */}
       <section id="contact" className="bg-white py-16 sm:py-20 scroll-mt-24">

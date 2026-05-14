@@ -23,6 +23,7 @@ export default async function Page() {
       {role === "ADMIN" && (
         <div className="ml-auto w-fit my-5">
           <CreateClassButton instructors={instructors} />
+
           <FreeClasses/>
           
         </div>
@@ -34,3 +35,4 @@ export default async function Page() {
     </div>
   );
 }
+

@@ -13,7 +13,7 @@ function Logo({ configStyles, logoUrl, linkUrl }: LogoProps) {
     <div className={`w-[5rem] md:w-[10rem] ${configStyles}`}>
       <Link href={linkUrl || "/"}>
         <Image
-          src={logoUrl || "/logo/logo.png"}
+          src={logoUrl || "/logo/logo1.png"}
           alt="Milan Pitagaldeniya"
           width={150}
           height={60}
