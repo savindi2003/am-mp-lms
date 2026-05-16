@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/app/auth";
 import { prisma } from "@/lib/db";
+import { fromZonedTime } from "date-fns-tz";
 
+const TIME_ZONE = "Asia/Colombo";
 
 export async function GET(
   req: Request,
@@ -54,22 +56,37 @@ export async function POST(
 ) {
   const session = await auth();
 
-  if (session?.user.role !== "ADMIN")
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (session?.user.role !== "ADMIN") {
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
 
   const { courseId } = await params;
   const id = Number(courseId);
 
   const body = await req.json();
 
+  
+  const fromLocal = `${body.lectureDate} ${body.fromTime}`;
+  const toLocal = `${body.lectureDate} ${body.toTime}`;
+
+  
+  const fromUTC = fromZonedTime(fromLocal, TIME_ZONE);
+  const toUTC = fromZonedTime(toLocal, TIME_ZONE);
+
   const lecture = await prisma.courseLectureLink.create({
     data: {
       classId: id,
       title: body.title,
       meetingLink: body.meetingLink,
+
       lectureDate: new Date(body.lectureDate),
-      fromTime: new Date(`${body.lectureDate}T${body.fromTime}`),
-      toTime: new Date(`${body.lectureDate}T${body.toTime}`),
+
+      fromTime: fromUTC,
+      toTime: toUTC,
+
       uploadedByUserId: Number(session.user.id),
       month: body.month,
     },
@@ -77,7 +94,6 @@ export async function POST(
 
   return NextResponse.json(lecture);
 }
-
 // import { NextRequest, NextResponse } from "next/server";
 // import { auth } from "@/app/auth";
 // import { prisma } from "@/lib/db";
