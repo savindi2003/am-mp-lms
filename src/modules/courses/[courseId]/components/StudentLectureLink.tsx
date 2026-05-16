@@ -3,11 +3,14 @@
 import { useLectureLinks } from "../hooks/useLectureLinks";
 import Spinner from "@/modules/shared/components/Spinner";
 import Empty from "@/modules/shared/components/Empty";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Lock, Unlock } from "lucide-react";
+import { formatDate, formatTime } from "@/lib/time";
+import { getLectureStatus } from "@/lib/lectureStatus";
+
 
 export default function StudentLectureLinks({
   courseId,
@@ -21,6 +24,7 @@ export default function StudentLectureLinks({
 
   const currentMonth = new Date().toISOString().slice(0, 7);
   const [openMonth, setOpenMonth] = useState<string>(currentMonth);
+  const [now, setNow] = useState(new Date());
 
   // GROUP BY MONTH
   const grouped = useMemo(() => {
@@ -52,6 +56,14 @@ export default function StudentLectureLinks({
 
     return { locked: true };
   };
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setNow(new Date());
+    }, 60000);
+
+    return () => clearInterval(id);
+  }, []);
 
   if (loading) return <Spinner />;
   if (error) return <div className="text-red-500">{error}</div>;
@@ -104,9 +116,12 @@ export default function StudentLectureLinks({
           ) : (
             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
               {grouped[month].map((lec: any) => {
-                const isLive = lec.status === "LIVE";
-                const isScheduled = lec.status === "SCHEDULED";
-                const isCancelled = lec.status === "CANCEL";
+                const liveStatus = getLectureStatus(lec);
+
+                const isLive = liveStatus === "LIVE";
+                const isScheduled = liveStatus === "SCHEDULED";
+                const isCancelled = liveStatus === "CANCEL";
+                const isCompleted = liveStatus === "COMPLETED";
 
                 return (
                   <li
@@ -128,7 +143,7 @@ export default function StudentLectureLinks({
                           isCancelled && "bg-gray-200 text-gray-500"
                         )}
                       >
-                        {lec.status}
+                        {liveStatus}
                       </span>
                     </div>
 
@@ -150,12 +165,11 @@ export default function StudentLectureLinks({
                         </h3>
 
                         <p className="text-xs text-slate-500 mt-1">
-                          📅 {format(new Date(lec.lectureDate), "dd MMM yyyy")}
+                          📅 {formatDate(lec.lectureDate)}
                         </p>
 
                         <p className="text-xs text-slate-500">
-                          ⏰ {format(new Date(lec.fromTime), "hh:mm a")} -{" "}
-                          {format(new Date(lec.toTime), "hh:mm a")}
+                          ⏰ {formatTime(lec.fromTime)} - {formatTime(lec.toTime)}
                         </p>
                       </div>
                     </div>
@@ -228,4 +242,3 @@ export default function StudentLectureLinks({
   );
 }
 
-//me lecture link card ekata podi image ekak add wenna one. eka responsive gelapena vidiyata mekata add karanna

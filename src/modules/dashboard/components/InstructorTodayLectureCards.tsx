@@ -5,10 +5,14 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
+import { formatDate, formatTime } from "@/lib/time";
+import { getLectureStatus } from "@/lib/lectureStatus";
+import Spinner from "@/modules/shared/components/Spinner";
 
 export default function InstructorTodayLectureCards() {
     const [lectures, setLectures] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
+    const [now, setNow] = useState(new Date());
 
     const instructorId = 1; //  replace with session user id
 
@@ -20,6 +24,12 @@ export default function InstructorTodayLectureCards() {
                 `/api/backend/instructor/dashboard?instructorId=${instructorId}`
             );
 
+            if (!res.ok) {
+                const text = await res.text();
+                console.error(text);
+                throw new Error("Failed to fetch lectures");
+            }
+
             const data = await res.json();
             setLectures(data);
 
@@ -30,8 +40,20 @@ export default function InstructorTodayLectureCards() {
         }
     };
 
+    // useEffect(() => {
+    //     loadLectures();
+    // }, []);
+
     useEffect(() => {
+        // first load
         loadLectures();
+
+        // auto refresh every minute
+        const id = setInterval(() => {
+            loadLectures();
+        }, 60000);
+
+        return () => clearInterval(id);
     }, []);
 
     return (
@@ -42,7 +64,7 @@ export default function InstructorTodayLectureCards() {
             </h1>
 
             {loading && (
-                <p className="text-sm text-gray-500">Loading lectures...</p>
+                <Spinner />
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -54,10 +76,12 @@ export default function InstructorTodayLectureCards() {
                 )}
 
                 {lectures.map((lec) => {
-                    const isLive = lec.status === "LIVE";
-                    const isScheduled = lec.status === "SCHEDULED";
-                    const isCancelled = lec.status === "CANCEL";
-                    const isCompleted = lec.status === "COMPLETED";
+                    const liveStatus = getLectureStatus(lec);
+
+                    const isLive = liveStatus === "LIVE";
+                    const isScheduled = liveStatus === "SCHEDULED";
+                    const isCancelled = liveStatus === "CANCEL";
+                    const isCompleted = liveStatus === "COMPLETED";
 
                     return (
                         <div
@@ -67,7 +91,7 @@ export default function InstructorTodayLectureCards() {
                                 isCancelled && "opacity-60"
                             )}
                         >
-                            
+
                             <div className="flex justify-start">
                                 <span className="bg-slate-800 text-white font-semibold text-xs p-1">{lec.class.classType.name}</span>
                             </div>
@@ -75,7 +99,7 @@ export default function InstructorTodayLectureCards() {
                             <div className="flex justify-start">
                                 <span className="text-slate-500 font-semibold">{lec.class.description}</span>
                             </div>
-                           
+
                             <div className="flex items-center justify-between">
 
                                 <h3 className="font-semibold text-sm truncate">
@@ -91,14 +115,14 @@ export default function InstructorTodayLectureCards() {
                                         isCancelled && "bg-gray-200 text-gray-500"
                                     )}
                                 >
-                                    {lec.status}
+                                    {liveStatus}
                                 </span>
                             </div>
 
-                            
+
                             <div className="flex items-start gap-3">
 
-                               
+
                                 <div className="h-11 w-11 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
                                     <Image
                                         src="/meet.png"
@@ -108,20 +132,19 @@ export default function InstructorTodayLectureCards() {
                                     />
                                 </div>
 
-                                
+
                                 <div className="flex flex-col text-xs text-slate-500 leading-5">
                                     <span>
                                         📅 {format(new Date(lec.lectureDate), "PPP")}
                                     </span>
 
                                     <span>
-                                        ⏰ {format(new Date(lec.fromTime), "hh:mm a")} -{" "}
-                                        {format(new Date(lec.toTime), "hh:mm a")}
+                                        ⏰ {formatTime(lec.fromTime)} - {formatTime(lec.toTime)}
                                     </span>
                                 </div>
                             </div>
 
-                           
+
                             <div>
                                 <Link href={lec.meetingLink} target="_blank">
                                     <button

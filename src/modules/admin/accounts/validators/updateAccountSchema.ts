@@ -27,9 +27,10 @@ export const updateAccountSchema = z.object({
     .regex(CONTACT_NO_REGEX, "Invalid mobile number")
     .optional(),
   guardianContactNo: z
-    .string()
-    .regex(CONTACT_NO_REGEX, "Invalid mobile number")
-    .optional(),
+        .string()
+        .regex(CONTACT_NO_REGEX, "Invalid mobile number")
+        .optional()
+        .or(z.literal("")),
   address: z.string().min(5, { message: "* Address is required" }).optional(),
   guardianFirstName: z
     .string()

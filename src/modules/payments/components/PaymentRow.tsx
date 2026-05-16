@@ -1,6 +1,14 @@
 import { FaReceipt } from "react-icons/fa";
 
 export default function PaymentRow({ row }: any) {
+
+  const openInvoice = () => {
+    window.open(
+      `/api/backend/payments/${row.paymentId}/invoice`,
+      "_blank"
+    );
+  };
+
   return (
     <tr className="border-t">
       <td className="p-3">{row.classTypeName}</td>
@@ -14,6 +22,7 @@ export default function PaymentRow({ row }: any) {
 
       <td className="p-3 flex justify-end">
         <button
+          onClick={openInvoice}
           className="text-gray-400 hover:text-gray-800 cursor-pointer"
           title="View Receipt"
         >

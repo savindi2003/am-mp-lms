@@ -43,7 +43,6 @@ function AccountUpdateForm({
         const required: Array<[keyof UpdateAccountFormData, string]> = [
           ["email", "* Email is required"],
           ["contactNo", "* Contact number is required"],
-          ["guardianContactNo", "* Guardian contact number is required"],
           ["guardianFirstName", "* Guardian first name is required"],
           ["guardianLastName", "* Guardian last name is required"],
           ["address", "* Address is required"],

@@ -25,6 +25,10 @@ export async function updateLectureStatus(
   lectureId: string,
   status: string
 ) {
+
+  alert(lectureId);
+  alert(courseId);
+
   const res = await fetch(
     `/api/backend/admin/courses/${courseId}/lecture-links/${lectureId}/status`,
     {

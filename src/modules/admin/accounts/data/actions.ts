@@ -97,7 +97,7 @@ export async function createAccount(
                   address: input.address!,
                   dob: new Date(input.dob!),
                   gender: input.gender as Gender,
-                  guardianContactNo: input.guardianContactNo!,
+                  guardianContactNo: input.guardianContactNo ?? "",
                   guardianFirstName: input.guardianFirstName!,
                   guardianLastName: input.guardianLastName!,
                 },
@@ -320,7 +320,7 @@ export async function getAllAccountsForAdmin(
         address: u.student.address,
         dob: u.student.dob,
         gender: u.student.gender,
-        guardianContactNo: u.student.guardianContactNo,
+        guardianContactNo: u.student.guardianContactNo ?? undefined,
         guardianFirstName: u.student.guardianFirstName,
         guardianLastName: u.student.guardianLastName,
       };

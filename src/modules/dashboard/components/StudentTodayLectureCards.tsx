@@ -6,6 +6,8 @@ import { format } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
 import Spinner from "@/modules/shared/components/Spinner";
+import { formatDate, formatTime } from "@/lib/time";
+import { getLectureStatus } from "@/lib/lectureStatus";
 
 export default function StudentTodayLectureCards({ userId }: { userId: number }) {
     const [lectures, setLectures] = useState<any[]>([]);
@@ -38,7 +40,15 @@ export default function StudentTodayLectureCards({ userId }: { userId: number })
     };
 
     useEffect(() => {
+        // first load
         loadLectures();
+
+        // auto refresh every minute
+        const id = setInterval(() => {
+            loadLectures();
+        }, 60000);
+
+        return () => clearInterval(id);
     }, []);
 
     return (
@@ -61,9 +71,12 @@ export default function StudentTodayLectureCards({ userId }: { userId: number })
                 )}
 
                 {lectures.map((lec) => {
-                    const isLive = lec.status === "LIVE";
-                    const isScheduled = lec.status === "SCHEDULED";
-                    const isCancelled = lec.status === "CANCEL";
+                    const liveStatus = getLectureStatus(lec);
+
+                    const isLive = liveStatus === "LIVE";
+                    const isScheduled = liveStatus === "SCHEDULED";
+                    const isCancelled = liveStatus === "CANCEL";
+                    const isCompleted = liveStatus === "COMPLETED";
 
                     return (
                         <div
@@ -96,7 +109,7 @@ export default function StudentTodayLectureCards({ userId }: { userId: number })
                                     isScheduled && "bg-yellow-100 text-yellow-700",
                                     isCancelled && "bg-gray-200 text-gray-500"
                                 )}>
-                                    {lec.status}
+                                    {liveStatus}
                                 </span>
 
                             </div>

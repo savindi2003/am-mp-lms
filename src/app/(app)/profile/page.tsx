@@ -24,7 +24,7 @@ export default async function StudentProfilePage() {
               contactNo={student.contactNo}
               dob={student.dob.toString()}
               gender={student.gender}
-              guardianContactNo={student.guardianContactNo}
+              guardianContactNo={student.guardianContactNo ?? undefined}
               guardianFirstName={student.guardianFirstName}
               guardianLastName={student.guardianLastName}
               address={student.address}

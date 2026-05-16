@@ -35,7 +35,7 @@ model Student {
   address           String
   dob               DateTime
   gender            Gender
-  guardianContactNo String
+  guardianContactNo String?
   guardianFirstName String
   guardianLastName  String
   createdAt         DateTime @default(now())

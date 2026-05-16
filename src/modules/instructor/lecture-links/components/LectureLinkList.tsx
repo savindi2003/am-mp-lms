@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { CourseLectureLink } from "../types/typeLectureLink";
 import Empty from "@/modules/shared/components/Empty";
 import Image from "next/image";
+import { formatDate, formatTime } from "@/lib/time";
+import { getLectureStatus } from "@/lib/lectureStatus";
 
 export default function LectureLinkList({
   links,
@@ -17,6 +19,7 @@ export default function LectureLinkList({
   const [showHistory, setShowHistory] = useState(false);
 
   const currentMonth = new Date().toISOString().slice(0, 7);
+  const [now, setNow] = useState(new Date());
 
   // GROUP BY MONTH (YYYY-MM)
   const grouped = useMemo(() => {
@@ -36,6 +39,14 @@ export default function LectureLinkList({
   const pastMonths = months.filter((m) => m < currentMonth);
   const current = months.filter((m) => m === currentMonth);
   const futureMonths = months.filter((m) => m > currentMonth);
+
+    useEffect(() => {
+      const id = setInterval(() => {
+        setNow(new Date());
+      }, 60000);
+  
+      return () => clearInterval(id);
+    }, []);
 
   //  auto open current month
   useMemo(() => {
@@ -72,9 +83,12 @@ export default function LectureLinkList({
         {isOpen && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
             {grouped[month].map((l: CourseLectureLink) => {
-              const isLive = l.status === "LIVE";
-              const isScheduled = l.status === "SCHEDULED";
-              const isCancelled = l.status === "CANCEL";
+              const liveStatus = getLectureStatus(l);
+              
+                              const isLive = liveStatus === "LIVE";
+                              const isScheduled = liveStatus === "SCHEDULED";
+                              const isCancelled = liveStatus === "CANCEL";
+                              const isCompleted = liveStatus === "COMPLETED";
 
               return (
                 <div
@@ -96,7 +110,7 @@ export default function LectureLinkList({
                       isCancelled && "bg-gray-200 text-gray-500"
                     )}
                   >
-                    {l.status}
+                    {liveStatus}
                   </span>
                 </div>
 
@@ -116,8 +130,7 @@ export default function LectureLinkList({
                     </p>
 
                     <p className="text-xs text-slate-500">
-                      ⏰ {format(new Date(l.fromTime), "hh:mm a")} -{" "}
-                      {format(new Date(l.toTime), "hh:mm a")}
+                      ⏰ {formatTime(l.fromTime)} - {formatTime(l.toTime)}
                     </p>
                   </div>
                 </div>

@@ -31,7 +31,8 @@ export const createAccountSchema = z
     guardianContactNo: z
       .string()
       .regex(CONTACT_NO_REGEX, "Invalid mobile number")
-      .optional(),
+      .optional()
+      .or(z.literal("")),
     address: z.string().min(5, { message: "* Address is required" }).optional(),
     guardianFirstName: z
       .string()
