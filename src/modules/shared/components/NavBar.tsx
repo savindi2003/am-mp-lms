@@ -109,7 +109,7 @@ export default function NavBar({ user }: { user: CurrentUserDTO }) {
                   href="/courses"
                   className="text-sm hover:rounded-none hover:text-yellow-400 hover:bg-transparent"
                 >
-                  All Courses
+                  All Classes
                 </NavigationMenuLink>
               </NavigationMenuItem>
               {isStudent ? (
@@ -242,7 +242,7 @@ export default function NavBar({ user }: { user: CurrentUserDTO }) {
                       href="/courses"
                       className="block rounded-none px-1 py-2 text-sm text-slate-700 active:text-yellow-500"
                     >
-                      All Courses
+                      All Classes
                     </Link>
                   </SheetClose>
                 </li>

@@ -13,7 +13,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 const NAV = [
-  { label: "Courses", id: "courses" },
+  { label: "Classes", id: "courses" },
   { label: "Contact", id: "contact" },
   { label: "About Us", id: "about" },
 ];
