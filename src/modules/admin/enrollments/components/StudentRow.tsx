@@ -44,7 +44,7 @@ export default function StudentRow({
   }
 
   return (
-    <Table.Row styles="grid md:grid-cols-6 px-4 py-3 items-center">
+    <Table.Row styles="grid md:grid-cols-7 px-4 py-3 items-center">
 
       {/* STUDENT */}
       <div>
@@ -54,12 +54,16 @@ export default function StudentRow({
         <div className="text-xs text-gray-500">
           {enrollment.student?.user?.NIC}
         </div>
-        <span className="text-[10px] bg-gray-200 px-1 w-fit mt-1">
+        <span className="text-[10px] bg-slate-800 text-white px-1 w-fit mt-1">
           {enrollment.enrollmentNumber}
         </span>
       </div>
 
-      {/* CLASS */}
+      
+      <div className="text-sm text-gray-700">
+  {enrollment.class?.classType?.name || "-"}
+</div>
+
       <div className="text-sm text-gray-700">
         {enrollment.class?.description}
       </div>

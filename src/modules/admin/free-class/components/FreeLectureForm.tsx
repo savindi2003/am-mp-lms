@@ -14,6 +14,7 @@ import {
 
 import { useClassTypes } from "../hooks/useClassTypes";
 import { useInstructors } from "../hooks/useInstructor";
+import { Button } from "@/modules/ui/button";
 
 type Props = {
   selectedLecture: any;
@@ -27,7 +28,6 @@ export default function FreeLectureForm({
   onCancel,
 }: Props) {
   const { classTypes } = useClassTypes();
-
   const { instructors } = useInstructors();
 
   const {
@@ -50,189 +50,208 @@ export default function FreeLectureForm({
     },
   });
 
+  // ✅ safe time formatter
+  const formatTimeInput = (value: any) => {
+    if (!value) return "";
+
+    const date = new Date(value);
+
+    if (isNaN(date.getTime())) return "";
+
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+
+    return `${hours}:${minutes}`;
+  };
+
+  // ✅ fill form on edit
   useEffect(() => {
     if (selectedLecture) {
       reset({
-        title: selectedLecture.title,
-        description: selectedLecture.description,
-
-        meetingLink: selectedLecture.meetingLink,
-
+        title: selectedLecture.title || "",
+        description: selectedLecture.description || "",
+        meetingLink: selectedLecture.meetingLink || "",
         lectureDate:
-          selectedLecture.lectureDate?.split("T")[0],
+          selectedLecture.lectureDate?.split("T")[0] || "",
 
-        fromTime:
-          selectedLecture.fromTime?.slice(0, 16),
+        fromTime: formatTimeInput(selectedLecture.fromTime),
+        toTime: formatTimeInput(selectedLecture.toTime),
 
-        toTime:
-          selectedLecture.toTime?.slice(0, 16),
-
-        classTypeId: String(
-          selectedLecture.classType.id
-        ),
-
-        instructorId: String(
-          selectedLecture.instructor.id
-        ),
+        classTypeId: String(selectedLecture.classType?.id || ""),
+        instructorId: String(selectedLecture.instructor?.id || ""),
       });
     } else {
-      reset();
+      reset({
+        title: "",
+        description: "",
+        meetingLink: "",
+        lectureDate: "",
+        fromTime: "",
+        toTime: "",
+        classTypeId: "",
+        instructorId: "",
+      });
     }
   }, [selectedLecture, reset]);
 
-  const onSubmit = async (
-    data: FreeLectureSchemaType
-  ) => {
+  // ✅ submit handler
+  const onSubmit = async (data: FreeLectureSchemaType) => {
     try {
       await onSubmitData(data);
 
       toast.success(
-        selectedLecture
-          ? "Lecture updated"
-          : "Lecture created"
+        selectedLecture ? "Lecture updated" : "Lecture created"
       );
 
-      reset();
+      reset();      // clear form
+      onCancel();   // exit edit mode
     } catch (error) {
       toast.error("Something went wrong");
     }
   };
 
   return (
-    <div className="bg-white border rounded-2xl p-6">
-      <h2 className="text-2xl font-bold mb-6">
-        {selectedLecture
-          ? "Update Free Class"
-          : "Create Free Class"}
+    <div>
+      <h2 className="mb-4 text-2xl font-semibold text-slate-800">
+        {selectedLecture ? "Update Free Class" : "Create Free Class"}
       </h2>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-5"
+        className="bg-slate-200 p-5 space-y-4"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <div>
-            <input
-              placeholder="Title"
-              {...register("title")}
-              className="w-full border rounded-xl px-4 py-3"
-            />
 
-            <p className="text-sm text-red-500 mt-1">
+          {/* TITLE */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Session Title
+            </label>
+            <input
+              {...register("title")}
+              className="input w-full sm:w-md"
+            />
+            <p className="text-xs text-red-500 mt-1">
               {errors.title?.message}
             </p>
           </div>
 
+          {/* MEETING LINK */}
           <div>
+            <label className="block text-sm font-medium mb-1">
+              Meeting Link
+            </label>
             <input
-              placeholder="Meeting Link"
               {...register("meetingLink")}
-              className="w-full border rounded-xl px-4 py-3"
+              className="input w-full sm:w-md"
             />
-
-            <p className="text-sm text-red-500 mt-1">
+            <p className="text-xs text-red-500 mt-1">
               {errors.meetingLink?.message}
             </p>
           </div>
 
+          {/* CLASS TYPE */}
           <div>
+            <label className="block text-sm font-medium mb-1">
+              Grade
+            </label>
             <select
               {...register("classTypeId")}
-              className="w-full border rounded-xl px-4 py-3"
+              className="input w-full sm:w-md"
             >
-              <option value="">
-                Select Class Type
-              </option>
-
+              <option value="">Select Grade</option>
               {classTypes.map((item: any) => (
-                <option
-                  key={item.id}
-                  value={item.id}
-                >
+                <option key={item.id} value={item.id}>
                   {item.name}
                 </option>
               ))}
             </select>
-
-            <p className="text-sm text-red-500 mt-1">
-              {errors.classTypeId?.message}
-            </p>
           </div>
 
+          {/* INSTRUCTOR */}
           <div>
+            <label className="block text-sm font-medium mb-1">
+              Instructor
+            </label>
             <select
               {...register("instructorId")}
-              className="w-full border rounded-xl px-4 py-3"
+              className="input w-full sm:w-md"
             >
-              <option value="">
-                Select Instructor
-              </option>
-
+              <option value="">Select Instructor</option>
               {instructors.map((item: any) => (
-                <option
-                  key={item.id}
-                  value={item.id}
-                >
+                <option key={item.id} value={item.id}>
                   {item.firstName} {item.lastName}
                 </option>
               ))}
             </select>
-
-            <p className="text-sm text-red-500 mt-1">
-              {errors.instructorId?.message}
-            </p>
           </div>
 
+          {/* DATE */}
           <div>
+            <label className="block text-sm font-medium mb-1">
+              Date
+            </label>
             <input
               type="date"
               {...register("lectureDate")}
-              className="w-full border rounded-xl px-4 py-3"
+              className="input w-full sm:w-md"
             />
           </div>
 
+          {/* FROM TIME */}
           <div>
+            <label className="block text-sm font-medium mb-1">
+              Time From
+            </label>
             <input
-              type="datetime-local"
+              type="time"
               {...register("fromTime")}
-              className="w-full border rounded-xl px-4 py-3"
+              className="input w-full sm:w-md"
             />
           </div>
 
+          {/* TO TIME */}
           <div>
+            <label className="block text-sm font-medium mb-1">
+              Time To
+            </label>
             <input
-              type="datetime-local"
+              type="time"
               {...register("toTime")}
-              className="w-full border rounded-xl px-4 py-3"
+              className="input w-full sm:w-md"
             />
           </div>
         </div>
 
-        <textarea
-          rows={4}
-          placeholder="Description"
-          {...register("description")}
-          className="w-full border rounded-xl px-4 py-3 resize-none"
-        />
+        {/* DESCRIPTION */}
+        <div>
+          <label className="block text-sm font-medium mb-1">
+            Session Description
+          </label>
+          <textarea
+            rows={4}
+            {...register("description")}
+            className="input w-full sm:w-md resize-none"
+          />
+        </div>
 
+        {/* ACTIONS */}
         <div className="flex gap-3">
-          <button
-            disabled={isSubmitting}
-            className="bg-blue-600 text-white px-6 py-3 rounded-xl"
-          >
-            {selectedLecture
-              ? "Update"
-              : "Create"}
-          </button>
+          <Button disabled={isSubmitting}>
+            {selectedLecture ? "Update" : "Create"}
+          </Button>
 
           {selectedLecture && (
-            <button
+            <Button
               type="button"
-              onClick={onCancel}
-              className="border px-6 py-3 rounded-xl"
+              variant="secondary"
+              onClick={() => {
+                reset();    // clear form
+                onCancel(); // exit edit mode
+              }}
             >
               Cancel
-            </button>
+            </Button>
           )}
         </div>
       </form>

@@ -22,6 +22,7 @@ export default function AttendanceTable({
           <Spinner/>
       )}
 
+      <div className="max-h-125 overflow-y-auto">
       {students.map((s: any, i: number) => (
         <AttendanceRow
           key={s.enrollmentId}
@@ -31,6 +32,7 @@ export default function AttendanceTable({
           setStudents={setStudents}
         />
       ))}
+      </div>
     </div>
   );
 }

@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { prisma } from "@/lib/db";
+import { fromZonedTime } from "date-fns-tz";
+
+const TIME_ZONE = "Asia/Colombo";
 
 type Params = {
   params: Promise<{
@@ -16,6 +19,13 @@ export async function PUT(
     const { id } = await params;
 
     const body = await req.json();
+
+    const fromLocal = `${body.lectureDate} ${body.fromTime}`;
+        const toLocal = `${body.lectureDate} ${body.toTime}`;
+    
+        // convert to UTC (IMPORTANT)
+        const fromUTC = fromZonedTime(fromLocal, TIME_ZONE);
+        const toUTC = fromZonedTime(toLocal, TIME_ZONE);
 
     const lecture =
       await prisma.freeLecture.update({
@@ -36,13 +46,8 @@ export async function PUT(
             body.lectureDate
           ),
 
-          fromTime: new Date(
-            body.fromTime
-          ),
-
-          toTime: new Date(
-            body.toTime
-          ),
+          fromTime: fromUTC,
+        toTime: toUTC,
 
           classTypeId: Number(
             body.classTypeId

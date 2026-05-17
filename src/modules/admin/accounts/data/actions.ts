@@ -253,91 +253,58 @@ export async function resetPassword(form: FormData) {
   return { ok: true };
 }
 
-export async function getAllAccountsForAdmin(
-  page: number,
-  selectedRole?: Role,
-) {
-  const session = await auth();
-  if (!session?.user?.id) throw new Error("Unauthorized");
+export async function getAllAccountsForAdmin() {
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      email: true,
+      NIC: true,
+      photo: true,
+      role: true,
+      createdAt: true,
 
-  const where = selectedRole ? { role: selectedRole } : undefined;
-  const skip = (page - 1) * PAGE_SIZE;
+      admin: {
+        select: { firstName: true, lastName: true },
+      },
 
-  const [total, users] = await prisma.$transaction([
-    prisma.user.count({ where }),
-    prisma.user.findMany({
-      where,
-      select: {
-        id: true,
-        email: true,
-        NIC: true,
-        photo: true,
-        role: true,
-        createdAt: true,
-        admin: { select: { firstName: true, lastName: true } },
-        instructor: {
-          select: { firstName: true, lastName: true, title: true },
-        },
-        student: {
-          select: {
-            firstName: true,
-            lastName: true,
-            contactNo: true,
-            address: true,
-            dob: true,
-            gender: true,
-            guardianContactNo: true,
-            guardianFirstName: true,
-            guardianLastName: true,
-          },
+      instructor: {
+        select: { firstName: true, lastName: true, title: true },
+      },
+
+      student: {
+        select: {
+          firstName: true,
+          lastName: true,
+          contactNo: true,
+          address: true,
+          dob: true,
+          gender: true,
+          guardianContactNo: true,
+          guardianFirstName: true,
+          guardianLastName: true,
         },
       },
-      orderBy: { id: "asc" },
-      skip,
-      take: PAGE_SIZE,
-    }),
-  ]);
-
-  const items = users.map((u): AccountUser => {
-    let profile;
-
-    if (u.role === "ADMIN" && u.admin) {
-      profile = {
-        firstName: u.admin.firstName,
-        lastName: u.admin.lastName,
-      };
-    } else if (u.role === "INSTRUCTOR" && u.instructor) {
-      profile = {
-        firstName: u.instructor.firstName,
-        lastName: u.instructor.lastName,
-        title: u.instructor.title,
-      };
-    } else if (u.role === "STUDENT" && u.student) {
-      profile = {
-        firstName: u.student.firstName,
-        lastName: u.student.lastName,
-        contactNo: u.student.contactNo,
-        address: u.student.address,
-        dob: u.student.dob,
-        gender: u.student.gender,
-        guardianContactNo: u.student.guardianContactNo ?? undefined,
-        guardianFirstName: u.student.guardianFirstName,
-        guardianLastName: u.student.guardianLastName,
-      };
-    }
-
-    return {
-      id: u.id,
-      email: u.email,
-      NIC: u.NIC,
-      role: u.role as AccountUser["role"],
-      photo: u.photo,
-      createdAt: u.createdAt,
-      profile,
-    };
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
-  return { items, total };
+  // 🔥 NORMALIZE TO SINGLE PROFILE
+  return users.map((u) => ({
+    id: u.id,
+    email: u.email,
+    NIC: u.NIC,
+    photo: u.photo,
+    role: u.role,
+    createdAt: u.createdAt,
+
+    profile:
+      u.student ??
+      u.instructor ??
+      u.admin ??
+      null,
+  }));
 }
 
 export async function getUserRoles() {

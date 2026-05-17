@@ -121,7 +121,15 @@ export default async function CourseVideosPage({ params }: PageProps) {
         {/* LECTURES */}
         <section className="p-6 bg-white">
           <h2 className="text-lg font-semibold">Active Time Table</h2>
-          <StudentLectureLinks courseId={cId} />
+
+          {isStatusActive ? (
+                <StudentLectureLinks courseId={cId} />
+          ) : (
+             <p className="text-slate-500">
+              You have no permission to access live sessions.
+            </p>
+          )}
+          
         </section>
 
         {/* RECORDINGS */}

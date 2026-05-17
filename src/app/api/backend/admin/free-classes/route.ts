@@ -1,7 +1,8 @@
-
 import { NextRequest, NextResponse } from "next/server";
-
 import { prisma } from "@/lib/db";
+import { fromZonedTime } from "date-fns-tz";
+
+const TIME_ZONE = "Asia/Colombo";
 
 export async function GET() {
   try {
@@ -30,56 +31,40 @@ export async function GET() {
   }
 }
 
-export async function POST(
-  req: NextRequest
-) {
+
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    const lecture =
-      await prisma.freeLecture.create({
-        data: {
-          title: body.title,
+    // combine date + time
+    const fromLocal = `${body.lectureDate} ${body.fromTime}`;
+    const toLocal = `${body.lectureDate} ${body.toTime}`;
 
-          description:
-            body.description,
+    // convert to UTC (IMPORTANT)
+    const fromUTC = fromZonedTime(fromLocal, TIME_ZONE);
+    const toUTC = fromZonedTime(toLocal, TIME_ZONE);
 
-          meetingLink:
-            body.meetingLink,
+    const lecture = await prisma.freeLecture.create({
+      data: {
+        title: body.title,
+        description: body.description,
+        meetingLink: body.meetingLink,
 
-          lectureDate: new Date(
-            body.lectureDate
-          ),
+        lectureDate: new Date(body.lectureDate),
 
-          fromTime: new Date(
-            body.fromTime
-          ),
+        fromTime: fromUTC,
+        toTime: toUTC,
 
-          toTime: new Date(
-            body.toTime
-          ),
+        classTypeId: Number(body.classTypeId),
+        instructorId: Number(body.instructorId),
+      },
+    });
 
-          classTypeId: Number(
-            body.classTypeId
-          ),
-
-          instructorId: Number(
-            body.instructorId
-          ),
-        },
-      });
-
-    return NextResponse.json(
-      lecture
-    );
+    return NextResponse.json(lecture);
   } catch (error) {
     return NextResponse.json(
-      {
-        error: "Failed to create lecture",
-      },
-      {
-        status: 500,
-      }
+      { error: "Failed to create lecture" },
+      { status: 500 }
     );
   }
 }

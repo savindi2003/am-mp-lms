@@ -11,6 +11,9 @@ import FreeLectureList from "@/modules/admin/free-class/components/FreeLectureLi
 import { useFreeLectures } from "@/modules/admin/free-class/hooks/useFreeLectures";
 
 export default function FreeLecturePage() {
+
+
+
   const {
     lectures,
     createLecture,
