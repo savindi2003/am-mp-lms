@@ -23,7 +23,7 @@ export default function AccountTableRow({
   const [pwd, setPwd] = useState("");
   const [isPending, startTransition] = useTransition();
 
-  // ✅ CLEAN PROFILE USAGE
+  // CLEAN PROFILE USAGE
   const firstName = user.profile?.firstName ?? "—";
   const lastName = user.profile?.lastName ?? "";
   const contact = user.profile?.contactNo ?? "—";

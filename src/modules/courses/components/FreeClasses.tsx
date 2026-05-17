@@ -1,9 +1,16 @@
+"use client";
 
+import { Button } from "@/modules/ui/button";
+import { useRouter } from "next/navigation";
 
-export default function FreeClasses(){
+export default function FreeClasses() {
+  const router = useRouter();
+
     return(
-        <div>
-            Free class
-        </div>
+        <Button variant="gray" className="mx-2"
+        onClick={() => router.push("/admin/free-classes")}
+        >
+            Free Seminar</Button>
     )
+
 }

@@ -9,7 +9,7 @@ function StudentAboutCourseModal({ course }: { course: CourseAbout }) {
   return (
     <Modal>
       <Modal.Open opens="create-account-form">
-        <Button variant="gray">About Course</Button>
+        <Button variant="gray" className="w-full sm:w-auto">About Course</Button>
       </Modal.Open>
       <Modal.Window name="create-account-form">
         <StudentAboutCourse course={course} />

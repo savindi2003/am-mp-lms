@@ -6,10 +6,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
 
     const month = searchParams.get("month");
-    const page = Number(searchParams.get("page") || 1);
-
-    const limit = 10;
-    const skip = (page - 1) * limit;
+    
 
     if (!month) {
       return NextResponse.json(
@@ -47,8 +44,7 @@ export async function GET(req: Request) {
         createdAt: "desc",
       },
 
-      skip,
-      take: limit,
+
     });
 
     //  TOTAL COUNT
@@ -111,11 +107,7 @@ export async function GET(req: Request) {
       totalEarnings:
         totalEarnings._sum.amount || 0,
 
-      totalPages: Math.ceil(
-        totalCount / limit,
-      ),
 
-      currentPage: page,
     });
   } catch (err) {
     console.error(

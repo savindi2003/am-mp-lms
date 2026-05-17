@@ -21,20 +21,22 @@ export default function AccessForm({ onSuccess }: any) {
   const [month, setMonth] = useState("");
   const [reason, setReason] = useState("");
 
-  
+  const [loading, setLoading] = useState(false);
 
-  //  search students
+  // search students
   useEffect(() => {
     if (query.length < 2) {
       setStudents([]);
       return;
     }
+
     searchStudents(query).then(setStudents);
   }, [query]);
 
-  //  load enrollments
+  // load enrollments
   useEffect(() => {
     if (!selectedStudent) return;
+
     getEnrollments(selectedStudent.id).then(setEnrollments);
   }, [selectedStudent]);
 
@@ -44,30 +46,41 @@ export default function AccessForm({ onSuccess }: any) {
       return;
     }
 
-    await createAccess({
-      enrollmentId: selectedEnrollment.id,
-      studentId: selectedStudent.id,
-      classId: selectedEnrollment.classId,
-      month,
-      reason,
-    });
+    try {
+      setLoading(true);
 
-    
-    toast.success("Access granted");
-    onSuccess();
+      await createAccess({
+        enrollmentId: selectedEnrollment.id,
+        studentId: selectedStudent.id,
+        classId: selectedEnrollment.classId,
+        month,
+        reason,
+      });
 
-    // reset
-    setSelectedStudent(null);
-    setSelectedEnrollment(null);
-    setQuery("");
-    setMonth("");
-    setReason("");
+      toast.success("Access granted");
+
+      onSuccess();
+
+      // reset
+      setSelectedStudent(null);
+      setSelectedEnrollment(null);
+      setQuery("");
+      setMonth("");
+      setReason("");
+
+    } catch (error: any) {
+      toast.error(
+        error?.message || "Failed to grant access"
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="bg-slate-200 p-5 space-y-4">
 
-      {/*  STUDENT SEARCH */}
+      {/* STUDENT SEARCH */}
       <div>
         <label className="block text-sm font-semibold mb-2">
           Search Student
@@ -78,6 +91,7 @@ export default function AccessForm({ onSuccess }: any) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="input w-full sm:w-md"
+          disabled={loading}
         />
 
         {/* dropdown results */}
@@ -87,6 +101,8 @@ export default function AccessForm({ onSuccess }: any) {
               <div
                 key={s.id}
                 onClick={() => {
+                  if (loading) return;
+
                   setSelectedStudent(s);
                   setStudents([]);
                 }}
@@ -99,25 +115,27 @@ export default function AccessForm({ onSuccess }: any) {
         )}
       </div>
 
-      {/*  SELECTED STUDENT */}
+      {/* SELECTED STUDENT */}
       {selectedStudent && (
         <div className="border p-3 bg-white text-sm flex justify-between w-full sm:w-md">
           <span>
             👤 {selectedStudent.firstName} {selectedStudent.lastName}
           </span>
+
           <button
+            disabled={loading}
             onClick={() => {
               setSelectedStudent(null);
               setSelectedEnrollment(null);
             }}
-            className="text-red-500 text-xs"
+            className="text-red-500 text-xs disabled:opacity-50"
           >
             Change
           </button>
         </div>
       )}
 
-      {/*  ENROLLMENTS */}
+      {/* ENROLLMENTS */}
       {selectedStudent && (
         <div>
           <label className="block text-sm font-semibold mb-2">
@@ -128,12 +146,16 @@ export default function AccessForm({ onSuccess }: any) {
             {enrollments.map((e) => (
               <div
                 key={e.id}
-                onClick={() => setSelectedEnrollment(e)}
+                onClick={() => {
+                  if (loading) return;
+                  setSelectedEnrollment(e);
+                }}
                 className={cn(
-                  "bg-white p-3 cursor-pointer text-sm w-full sm:w-md ",
+                  "bg-white p-3 cursor-pointer text-sm w-full sm:w-md",
                   selectedEnrollment?.id === e.id
-                    ? " border-2 border-black"
-                    : "hover:bg-gray-100"
+                    ? "border-2 border-black"
+                    : "hover:bg-gray-100",
+                  loading && "opacity-60 pointer-events-none"
                 )}
               >
                 <div className="font-medium">
@@ -149,7 +171,7 @@ export default function AccessForm({ onSuccess }: any) {
         </div>
       )}
 
-      {/*  MONTH */}
+      {/* MONTH */}
       <div>
         <label className="block text-sm font-semibold mb-2">
           Access Month
@@ -160,10 +182,11 @@ export default function AccessForm({ onSuccess }: any) {
           value={month}
           onChange={(e) => setMonth(e.target.value)}
           className="input w-full sm:w-md"
+          disabled={loading}
         />
       </div>
 
-      {/*  REASON */}
+      {/* REASON */}
       <div>
         <label className="block text-sm font-semibold mb-2">
           Reason
@@ -174,14 +197,18 @@ export default function AccessForm({ onSuccess }: any) {
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           className="input w-full sm:w-md"
+          disabled={loading}
         />
       </div>
 
-      {/*  SUBMIT */}
-      <Button onClick={handleSubmit} className="w-full sm:w-auto">
-        Grant Access
+      {/* SUBMIT */}
+      <Button
+        onClick={handleSubmit}
+        disabled={loading}
+        className="w-full sm:w-auto"
+      >
+        {loading ? "Granting Access..." : "Grant Access"}
       </Button>
     </div>
   );
 }
-

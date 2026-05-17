@@ -1,9 +1,7 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { getPayments } from "../services/apiPayments";
 
-export function usePayments(month: string, page: number) {
+export function usePayments(month: string, page: number = 1) {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 

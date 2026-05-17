@@ -50,7 +50,7 @@ export default function FreeLectureForm({
     },
   });
 
-  // ✅ safe time formatter
+  //  safe time formatter
   const formatTimeInput = (value: any) => {
     if (!value) return "";
 
@@ -64,7 +64,7 @@ export default function FreeLectureForm({
     return `${hours}:${minutes}`;
   };
 
-  // ✅ fill form on edit
+  //  fill form on edit
   useEffect(() => {
     if (selectedLecture) {
       reset({
@@ -94,7 +94,7 @@ export default function FreeLectureForm({
     }
   }, [selectedLecture, reset]);
 
-  // ✅ submit handler
+  //  submit handler
   const onSubmit = async (data: FreeLectureSchemaType) => {
     try {
       await onSubmitData(data);

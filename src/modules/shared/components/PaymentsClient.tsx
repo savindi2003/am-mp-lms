@@ -11,10 +11,10 @@ export default function PaymentsClient() {
     const currentMonth = new Date().toISOString().slice(0, 7);
 
     const [month, setMonth] = useState(currentMonth);
-    const [page, setPage] = useState(1);
+    
 
     //   const { data } = usePayments(month, page);
-    const { data, loading } = usePayments(month, page);
+    const { data, loading } = usePayments(month);
 
     return (
         <section>
@@ -26,7 +26,7 @@ export default function PaymentsClient() {
                         month={month}
                         setMonth={(m: any) => {
                             setMonth(m);
-                            setPage(1);
+                            
                         }}
                     />
                 </div>
@@ -51,15 +51,6 @@ export default function PaymentsClient() {
 
 
 
-            <div className="flex gap-2">
-                <button disabled={page === 1} onClick={() => setPage(page - 1)}>
-                    Prev
-                </button>
-
-                <button onClick={() => setPage(page + 1)}>
-                    Next
-                </button>
-            </div>
         </section>
     );
 }

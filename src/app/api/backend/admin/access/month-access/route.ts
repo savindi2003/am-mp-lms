@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
 import { auth } from "@/app/auth";
+import { syncEnrollmentToGoogle } from "@/services/enrollment-google-sync";
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -42,6 +43,8 @@ export async function POST(req: Request) {
     },
   });
 
+  await syncEnrollmentToGoogle(enrollmentId, month);
+
   return NextResponse.json(data);
 }
 
@@ -82,6 +85,11 @@ export async function PATCH(req: Request) {
       revokedAt: status === "REVOKED" ? new Date() : null,
     },
   });
+
+  await syncEnrollmentToGoogle(
+  updated.enrollmentId,
+  updated.month
+);
 
   return NextResponse.json(updated);
 }

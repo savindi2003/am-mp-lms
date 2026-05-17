@@ -89,3 +89,38 @@ export async function addStudentToClass(googleEventId: string, studentEmail: str
     throw error;
   }
 }
+
+export async function removeStudentFromClass(
+  googleEventId: string,
+  studentEmail: string
+) {
+  try {
+    const auth = getGoogleAuthClient();
+    const calendar = google.calendar({ version: "v3", auth });
+
+    const event = await calendar.events.get({
+      calendarId: "primary",
+      eventId: googleEventId,
+    });
+
+    const currentAttendees = event.data.attendees || [];
+
+    const updatedAttendees = currentAttendees.filter(
+      (a) => a.email !== studentEmail
+    );
+
+    await calendar.events.patch({
+      calendarId: "primary",
+      eventId: googleEventId,
+      sendUpdates: "none",
+      requestBody: {
+        attendees: updatedAttendees,
+      },
+    });
+
+    return { success: true };
+  } catch (err) {
+    console.error("Remove from Google Meet error:", err);
+    throw err;
+  }
+}

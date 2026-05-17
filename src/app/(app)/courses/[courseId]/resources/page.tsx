@@ -57,33 +57,45 @@ export default async function CourseVideosPage({ params }: PageProps) {
 
   const enrollmentId = enrollment.id;
 
+  const statusStyles: any = {
+    ACTIVE: "bg-green-100 text-green-700 border-green-300",
+    DROPPED: "bg-red-100 text-red-700 border-red-300",
+    COMPLETED: "bg-yellow-100 text-yellow-700 border-yellow-300",
+  };
+
   return (
     <main className="min-h-screen bg-white">
 
-      {/* HEADER */}
       <section className="border-b bg-gradient-to-r from-slate-50 to-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-8">
 
-          <div className="flex flex-col lg:flex-row justify-between gap-6 bg-gray-100 px-4 py-8">
+          <div className="flex flex-col lg:flex-row justify-between gap-6 bg-gray-100 px-4 py-6">
 
             {/* LEFT */}
-            <div className="space-y-4">
+            <div className="space-y-3">
 
-              <p className="text-xl font-bold text-slate-800">
+              <p className="text-lg sm:text-xl font-bold text-slate-800">
                 {course.classType?.name}
               </p>
 
-              <h1 className="text-2xl font-bold text-slate-800">
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-800 leading-snug">
                 {course.description}
               </h1>
 
-              <div className="flex gap-3">
+              {/* BADGES */}
+              <div className="flex flex-wrap gap-2 sm:gap-3">
 
-                <div className="bg-white p-3">
+                <div className="bg-white px-3 py-2 text-xs sm:text-sm rounded shadow-sm">
                   #{enrollment.enrollmentNumber}
                 </div>
 
-                <div className="bg-white p-3">
+
+
+                <div
+                  className={`px-3 py-2 text-xs sm:text-sm rounded border shadow-sm ${statusStyles[enrollment.enrollmentStatus] ||
+                    "bg-white text-slate-700 border-gray-200"
+                    }`}
+                >
                   {enrollment.enrollmentStatus}
                 </div>
 
@@ -91,26 +103,36 @@ export default async function CourseVideosPage({ params }: PageProps) {
             </div>
 
             {/* RIGHT BUTTONS */}
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full lg:w-auto">
 
               {aboutCourse && (
-                <StudentAboutCourseModal course={aboutCourse} />
+                <div className="w-full sm:w-auto">
+                  <StudentAboutCourseModal course={aboutCourse} />
+                </div>
               )}
 
-              {/* SAFE LINKS */}
+              {/* Attendance */}
               <Link
+                className="w-full sm:w-auto"
                 href={`/student/classes/${enrollmentId}/attendance?enrollmentId=${enrollmentId}`}
               >
-                <Button>Attendance</Button>
+                <Button className="w-full sm:w-auto">
+                  Attendance
+                </Button>
               </Link>
 
+              {/* Payments */}
               <Link
+                className="w-full sm:w-auto"
                 href={`/student/classes/${enrollmentId}/payments?enrollmentId=${enrollmentId}`}
               >
-                <Button variant="outline">Payments</Button>
+                <Button variant="outline" className="w-full sm:w-auto">
+                  Payments
+                </Button>
               </Link>
 
             </div>
+
           </div>
         </div>
       </section>
@@ -123,13 +145,13 @@ export default async function CourseVideosPage({ params }: PageProps) {
           <h2 className="text-lg font-semibold">Active Time Table</h2>
 
           {isStatusActive ? (
-                <StudentLectureLinks courseId={cId} />
+            <StudentLectureLinks courseId={cId} />
           ) : (
-             <p className="text-slate-500">
+            <p className="text-slate-500">
               You have no permission to access live sessions.
             </p>
           )}
-          
+
         </section>
 
         {/* RECORDINGS */}
