@@ -6,14 +6,32 @@ export async function GET(req: Request) {
   const classTypeId = Number(searchParams.get("classTypeId"));
 
   const packages = await prisma.classPackage.findMany({
-    include: {
-      items: {
-        include: {
-          class: true,
+  where: {
+    items: {
+      some: {
+        class: {
+          classTypeId: classTypeId,
         },
       },
     },
-  });
+  },
+  include: {
+    items: {
+      where: {
+        class: {
+          classTypeId: classTypeId,
+        },
+      },
+      include: {
+        class: {
+          include: {
+            classType: true,
+          },
+        },
+      },
+    },
+  },
+});
 
   return NextResponse.json(packages);
 }

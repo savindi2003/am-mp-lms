@@ -6,12 +6,12 @@ import { Button } from "@/modules/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 import {
   LoginFormData,
   loginSchema,
 } from "@/modules/auth/validators/loginSchema";
-import Link from "next/link";
 
 export default function LoginPage() {
   const {
@@ -24,6 +24,7 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormData) => {
     const toastId = toast.loading("Logging in...");
+
     const result = await signIn("credentials", {
       ...data,
       redirect: false,
@@ -38,66 +39,82 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="max-w-7xl w-full grid md:grid-cols-2 gap-10 p-6 md:p-12">
-        {/* Illustration */}
+    <div className="min-h-screen flex items-center justify-center bg-white px-4 py-8">
+      
+      <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+        
+        {/* IMAGE */}
         <div className="hidden md:flex items-center justify-center">
           <Image
             src="/login/login-illustration.svg"
             alt="Login Illustration"
-            width={400}
-            height={400}
+            width={380}
+            height={380}
             priority
+            className="w-full max-w-sm"
           />
         </div>
-        {/* Form Section */}
-        <div className="bg-slate-100 p-10 shadow">
-          <h2 className="text-3xl font-bold mb-6 text-gray-800">
+
+        {/* FORM */}
+        <div className="bg-slate-100 w-full p-6 sm:p-8 md:p-10  shadow-md">
+          
+          <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-gray-800 text-center md:text-left">
             Welcome back
           </h2>
 
-          <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="space-y-4"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            
+            {/* NIC */}
             <div className="flex flex-col gap-1">
-              <label
-                htmlFor="email"
-                className="text-slate-800 text-sm font-medium"
-              >
+              <label className="text-slate-800 text-sm font-medium">
                 National ID
               </label>
+
               <input
                 {...register("NIC")}
-                id="nId"
                 type="text"
-                className="input"
+                className="input w-full"
+                placeholder="Enter your NIC"
               />
+
               {errors.NIC && (
-                <p className="text-red-600 text-xs">{errors.NIC.message}</p>
+                <p className="text-red-600 text-xs">
+                  {errors.NIC.message}
+                </p>
               )}
             </div>
 
+            {/* PASSWORD */}
             <div className="flex flex-col gap-1">
-              <label
-                htmlFor="password"
-                className="text-slate-800 text-sm font-medium"
-              >
+              <label className="text-slate-800 text-sm font-medium">
                 Password
               </label>
+
               <input
                 {...register("password")}
-                id="password"
                 type="password"
-                className="input"
+                className="input w-full"
+                placeholder="Enter password"
               />
+
               {errors.password && (
                 <p className="text-red-600 text-xs">
                   {errors.password.message}
                 </p>
               )}
-              <Link href="/forgot-password" className="hover:underline text-sm">
-                forgot password?
+
+              <Link
+                href="/forgot-password"
+                className="text-sm text-right hover:underline text-gray-600"
+              >
+                Forgot password?
               </Link>
             </div>
 
+            {/* BUTTON */}
             <Button
               type="submit"
               variant="gray"

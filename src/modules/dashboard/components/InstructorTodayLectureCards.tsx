@@ -60,7 +60,7 @@ export default function InstructorTodayLectureCards() {
         <div className="p-5 bg-slate-100 ">
 
             <h1 className="text-2xl font-semibold mb-4">
-                Today Sessions
+                Upcomming Sessions
             </h1>
 
             {loading && (
