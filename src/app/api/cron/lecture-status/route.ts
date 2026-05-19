@@ -9,7 +9,7 @@ export async function GET() {
     const completed = await prisma.courseLectureLink.updateMany({
       where: {
         status: {
-          not: "COMPLETED",
+          notIn: ["COMPLETED", "CANCEL"], 
         },
         toTime: {
           lt: now,
@@ -20,11 +20,11 @@ export async function GET() {
       },
     });
 
-    // 2. Mark LIVE (optional but recommended)
+    // 2. Mark LIVE
     const live = await prisma.courseLectureLink.updateMany({
       where: {
         status: {
-          not: "COMPLETED",
+          notIn: ["COMPLETED", "CANCEL"], 
         },
         fromTime: {
           lte: now,
@@ -42,7 +42,7 @@ export async function GET() {
     const upcoming = await prisma.courseLectureLink.updateMany({
       where: {
         status: {
-          not: "COMPLETED",
+          notIn: ["COMPLETED", "CANCEL"], 
         },
         fromTime: {
           gt: now,

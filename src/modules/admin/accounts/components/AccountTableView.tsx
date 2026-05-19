@@ -64,7 +64,7 @@ export default function AccountTableView({
       <div className="border  bg-white">
         {/* HEADER */}
         <table className="w-full text-sm">
-          <thead className="bg-slate-100 sticky top-0">
+          <thead className="px-4 py-2 text-sm font-bold bg-gray-100">
             <tr>
               <th className="p-3 text-left">Name</th>
               <th className="p-3 text-left">Email</th>
@@ -78,7 +78,7 @@ export default function AccountTableView({
         </table>
 
         {/* BODY (SCROLLABLE) */}
-        <div className="max-h-[500px] overflow-y-auto">
+        <div className="max-h-125 overflow-y-auto bg-white">
           <table className="w-full text-sm">
             <tbody>
               {filtered.map((user) => (

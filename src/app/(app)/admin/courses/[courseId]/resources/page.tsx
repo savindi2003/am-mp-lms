@@ -5,6 +5,7 @@ import CourseResourceManager from "@/modules/shared/components/CourseResourceMan
 import { LectureManager } from "@/modules/admin/lecture-links/components/LectureManager";
 import { prisma } from "@/lib/db";
 import { ClassRecordingManager } from "@/modules/admin/class-recordings/services/ClassRecordingManager";
+import ClassLinkManager from "@/modules/admin/lecture-links/components/ClassLinkManager";
 
 export const dynamic = "force-dynamic";
 
@@ -26,11 +27,33 @@ export default async function AdminCourseVideosPage({
     },
     select: {
       meetingLink: true,
+      expireDate: true,
+      googleEventId: true,
+
+      description: true,
+      classType: {
+        select: {
+          name: true,
+        },
+      },
     },
   });
 
   return (
     <section className="container flex flex-col gap-20">
+
+      <div className="mt-10">
+        <ClassLinkManager
+          courseId={courseId}
+          currentExpireDate={course?.expireDate}
+          googleEventId={course?.googleEventId}
+          meetingLink={course?.meetingLink}
+          classname={course?.description}
+          grade={course?.classType.name}
+        />
+      </div>
+
+
       <div>
         <h1 className="mb-4 text-2xl font-semibold text-slate-800">
           Manage Lecture Session
@@ -54,12 +77,12 @@ export default async function AdminCourseVideosPage({
       </div>
 
       <div>
-      <h1 className="mb-4 text-2xl font-semibold text-slate-800">
+        <h1 className="mb-4 text-2xl font-semibold text-slate-800">
           Class Recodings
         </h1>
 
-      <ClassRecordingManager courseId={courseId}/>
-    </div>
+        <ClassRecordingManager courseId={courseId} />
+      </div>
 
       <div>
         <h1 className="mb-4 text-2xl font-semibold text-slate-800">

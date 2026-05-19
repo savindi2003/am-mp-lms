@@ -77,7 +77,7 @@ export default function AccountTableRow({
   }
 
   return (
-    <tr className="border-t hover:bg-slate-50">
+    <tr className="border-t ">
       {/* NAME */}
       <td className="p-3 font-medium">
         {firstName} {lastName}
@@ -109,7 +109,7 @@ export default function AccountTableRow({
           {/* EDIT */}
           <Modal>
             <Modal.Open opens="edit">
-              <Button size="sm" variant="secondary">Edit</Button>
+              <Button size="sm" variant="secondary" className="rounded-none">Edit</Button>
             </Modal.Open>
 
             <Modal.Window name="edit">
@@ -123,7 +123,7 @@ export default function AccountTableRow({
           {/* RESET */}
           <Modal>
             <Modal.Open opens="reset">
-              <Button size="sm" variant="secondary">Reset</Button>
+              <Button size="sm" variant="secondary" className="rounded-none">Reset</Button>
             </Modal.Open>
 
             <Modal.Window name="reset">
@@ -139,7 +139,7 @@ export default function AccountTableRow({
           {/* DELETE */}
           <Modal>
             <Modal.Open opens="delete">
-              <Button size="sm" variant="destructive">
+              <Button size="sm" variant="destructive" className="rounded-none">
                 Delete
               </Button>
             </Modal.Open>

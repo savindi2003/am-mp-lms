@@ -178,7 +178,7 @@ export default function StudentLectureLinks({
                     <div className="mt-4">
                       <Link href={lec.meetingLink} target="_blank">
                         <button
-                          disabled={isCancelled}
+                          disabled={isCancelled || isCompleted}
                           className={cn(
                             "w-full text-xs py-2 font-medium",
                             isLive &&

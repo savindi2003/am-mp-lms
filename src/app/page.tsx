@@ -74,7 +74,7 @@ export default async function HomePage() {
           </div>
           <div className="flex justify-center">
             <Image
-              src="/primary/teaching-photo.jpg"
+              src="/primary/teaching-photo.png"
               alt="Instructor teaching"
               width={640}
               height={420}
