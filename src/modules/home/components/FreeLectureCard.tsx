@@ -7,7 +7,7 @@ import Image from "next/image";
 import {
   CalendarDays,
   Clock3,
-  PlayCircle,
+  ArrowBigRight ,
   Video,
 } from "lucide-react";
 
@@ -145,7 +145,7 @@ export default function FreeLectureCard({
 
       {/* DESCRIPTION */}
       {lecture.description && (
-        <p className="mt-4 text-xs sm:text-sm leading-relaxed text-slate-600 line-clamp-4">
+        <p className="mt-4 text-xs sm:text-sm leading-relaxed text-slate-600">
           {lecture.description}
         </p>
       )}
@@ -193,8 +193,8 @@ export default function FreeLectureCard({
                   
                   className="w-full text-xs sm:text-sm"
                 >
-                  <PlayCircle className="mr-2 h-4 w-4" />
-                  Open
+                 
+                  Join Now
                 </Button>
               </Link>
 
