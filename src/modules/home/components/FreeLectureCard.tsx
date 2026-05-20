@@ -4,6 +4,12 @@ import { Button } from "@/modules/ui/button";
 import { format, isAfter, isBefore } from "date-fns";
 import Link from "next/link";
 import Image from "next/image";
+import {
+  CalendarDays,
+  Clock3,
+  PlayCircle,
+  Video,
+} from "lucide-react";
 
 type FreeLecture = {
   id: number;
@@ -32,41 +38,38 @@ export default function FreeLectureCard({
 }: {
   lecture: FreeLecture;
 }) {
-
   const now = new Date();
 
   const startTime = new Date(lecture.fromTime);
-
   const endTime = new Date(lecture.toTime);
 
-  // HIDE PAST LECTURES
   const isPast = isAfter(now, endTime);
 
   if (isPast) return null;
 
-  // LIVE STATUS
   const isLive =
     isAfter(now, startTime) &&
     isBefore(now, endTime);
 
+  // GOOGLE DRIVE RESOURCE LINK
+  const resourceLink =
+    "https://youtu.be/Z_H9l_e5GlM/";
+
   return (
-    <div className="relative w-full border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+    <div className="relative w-full border border-slate-200 bg-white p-3 sm:p-5 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
 
-      {/* STATUS BADGE */}
-      <div className="absolute top-4 right-4">
-
-        <span className="rounded-full bg-green-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-green-700">
-            FREE
+      {/* STATUS */}
+      <div className="absolute top-3 right-3 sm:top-4 sm:right-4">
+        <span className="rounded-full bg-green-100 px-2 sm:px-3 py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wide text-green-700">
+          FREE
         </span>
-        
-
       </div>
 
       {/* TOP */}
-      <div className="flex items-start gap-4">
+      <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
 
-        {/* GOOGLE MEET ICON */}
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 shrink-0">
+        {/* ICON */}
+        <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-slate-100 shrink-0">
 
           <Image
             src="/meet.png"
@@ -79,18 +82,18 @@ export default function FreeLectureCard({
         </div>
 
         {/* TITLE */}
-        <div className="flex-1 pr-12">
+        <div className="flex-1 pr-0 sm:pr-12">
 
-          <h3 className="text-lg sm:text-xl font-bold text-slate-800 leading-snug">
+          <h3 className="text-base sm:text-lg font-bold text-slate-800 leading-snug">
             {lecture.title}
           </h3>
 
-          <p className="mt-1 text-sm font-semibold text-blue-600">
+          <p className="mt-1 text-xs sm:text-sm font-semibold text-yellow-400">
             {lecture.classType.name}
           </p>
 
-          <p className="mt-2 text-xs text-slate-500">
-            {lecture.instructor.title}{" with "}
+          <p className="mt-2 text-[11px] sm:text-xs text-slate-500">
+            {lecture.instructor.title} with{" "}
             {lecture.instructor.firstName}{" "}
             {lecture.instructor.lastName}
           </p>
@@ -99,40 +102,110 @@ export default function FreeLectureCard({
       </div>
 
       {/* DATE & TIME */}
-      <div className="mt-5 rounded-xl bg-slate-50 p-4 text-sm text-slate-700 space-y-2">
+      <div className="mt-4 sm:mt-5 space-y-3 border border-blue-100 bg-slate-50 p-3 sm:p-4">
 
-        <div className="flex items-center gap-2">
-          <span>📅</span>
+        <div className="flex items-start sm:items-center gap-3 text-sm text-slate-700">
 
-          <span>
-            {format(new Date(lecture.lectureDate), "PPP")}
-          </span>
+          <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-white shadow-sm">
+            <CalendarDays className="h-4 w-4 text-yellow-400" />
+          </div>
+
+          <div>
+            <p className="text-[10px] sm:text-xs font-medium uppercase tracking-wide text-slate-400">
+              Lecture Date
+            </p>
+
+            <p className="text-sm font-semibold">
+              {format(new Date(lecture.lectureDate), "PPP")}
+            </p>
+          </div>
+
         </div>
 
-        <div className="flex items-center gap-2">
-          <span>⏰</span>
+        <div className="flex items-start sm:items-center gap-3 text-sm text-slate-700">
 
-          <span>
-            {format(startTime, "hh:mm a")} -{" "}
-            {format(endTime, "hh:mm a")}
-          </span>
+          <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-white shadow-sm">
+            <Clock3 className="h-4 w-4 text-yellow-400" />
+          </div>
+
+          <div>
+            <p className="text-[10px] sm:text-xs font-medium uppercase tracking-wide text-slate-400">
+              Class Time
+            </p>
+
+            <p className="text-sm font-semibold">
+              {format(startTime, "hh:mm a")} -{" "}
+              {format(endTime, "hh:mm a")}
+            </p>
+          </div>
+
         </div>
 
       </div>
 
       {/* DESCRIPTION */}
       {lecture.description && (
-        <p className="mt-4 text-sm leading-relaxed text-slate-600 line-clamp-3">
+        <p className="mt-4 text-xs sm:text-sm leading-relaxed text-slate-600 line-clamp-4">
           {lecture.description}
         </p>
       )}
 
-      {/* BUTTON */}
-      <Link
-        href={lecture.meetingLink}
-        target="_blank"
-        className="mt-5 block"
-      >
+      {/* TODAY CLASS RESOURCES */}
+      <div className="mt-5 border border-blue-100 bg-slate-50 p-3 sm:p-4">
+
+        {/* LABEL */}
+        <div className="mb-3">
+          <span className="rounded-full bg-yellow-100 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-yellow-700">
+            Class Resources
+          </span>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-start gap-3">
+
+          {/* VIDEO ICON */}
+          <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-white shadow-sm">
+            <Video className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" />
+          </div>
+
+          <div className="flex-1 w-full">
+
+            <p className="mt-1 text-[11px] sm:text-xs leading-relaxed text-slate-600">
+              Watch today's class video resource and learning materials.
+            </p>
+
+            {/* OPEN BUTTON */}
+            
+
+          </div>
+
+        </div>
+
+        <div>
+
+          <div className="mt-4">
+
+              <Link
+                href={resourceLink}
+                target="_blank"
+                className="w-full"
+              >
+                <Button
+                  
+                  className="w-full text-xs sm:text-sm"
+                >
+                  <PlayCircle className="mr-2 h-4 w-4" />
+                  Open
+                </Button>
+              </Link>
+
+            </div>
+
+        </div>
+
+      </div>
+
+      {/* JOIN */}
+      {/* <Link href={lecture.meetingLink} target="_blank" className="mt-5 block">
 
         <Button
           className={`w-full h-11 text-sm font-semibold ${
@@ -144,7 +217,7 @@ export default function FreeLectureCard({
           {isLive ? "Join Now" : "Join Class"}
         </Button>
 
-      </Link>
+      </Link> */}
     </div>
   );
 }

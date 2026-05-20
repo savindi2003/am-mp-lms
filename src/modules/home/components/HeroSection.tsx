@@ -49,7 +49,7 @@ export default function HeroSection() {
               transition={{ delay: 0.5, duration: 1 }}
               className="text-2xl sm:text-4xl lg:text-7xl font-bold text-slate-800 leading-tight"
             >
-              Discover, Learn, and Master Science with Ease
+              Discover, Learn, and Master Science with Milan
             </motion.h1>
 
             <motion.p
