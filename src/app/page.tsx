@@ -6,6 +6,7 @@ import AboutUs from "@/modules/home/components/AboutUs";
 import FreeLectureList from "@/modules/home/components/FreeLectureList";
 import FreeLectureSlider from "@/modules/home/components/FreeLectureSlider";
 import HeroSection from "@/modules/home/components/HeroSection";
+import PastFreeClassSlider from "@/modules/home/components/PastFreeClassSlider";
 
 export default async function HomePage() {
   const courses = await getCourses();
@@ -70,6 +71,14 @@ export default async function HomePage() {
 
 
           <FreeLectureSlider />
+
+        </div>
+      </section>
+
+      <section id="courses" className="bg-slate-50 scroll-mt-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
+
+          <PastFreeClassSlider />
 
         </div>
       </section>

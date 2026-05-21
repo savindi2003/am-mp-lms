@@ -27,32 +27,32 @@ export default function CreatePackageForm({
     createPackage,
   } = useCreatePackage();
 
-const {
-  register,
-  handleSubmit,
-  reset,
-} = useForm({
-  resolver: zodResolver(packageSchema),
+  const {
+    register,
+    handleSubmit,
+    reset,
+  } = useForm({
+    resolver: zodResolver(packageSchema),
 
-  defaultValues: {
-    name: "",
-    totalFee: "",
-    classIds: [],
-  },
-});
+    defaultValues: {
+      name: "",
+      totalFee: "",
+      classIds: [],
+    },
+  });
 
   // unique class types
   const classTypes = useMemo(() => {
-  const map = new Map<number, string>();
+    const map = new Map<number, string>();
 
-  classes.forEach((cls: any) => {
-    if (cls?.classType) {
-      map.set(cls.classType.id, cls.classType.name);
-    }
-  });
+    classes.forEach((cls: any) => {
+      if (cls?.classType) {
+        map.set(cls.classType.id, cls.classType.name);
+      }
+    });
 
-  return Array.from(map.entries()); // [id, name]
-}, [classes]);
+    return Array.from(map.entries()); // [id, name]
+  }, [classes]);
 
   // filtered classes
   const filteredClasses = classes.filter(
@@ -62,71 +62,71 @@ const {
 
   async function onSubmit(data: any) {
 
-  const success = await createPackage({
-    ...data,
+    const success = await createPackage({
+      ...data,
 
-    classIds: data.classIds.map(
-      (id: string) => Number(id)
-    ),
-  });
+      classIds: data.classIds.map(
+        (id: string) => Number(id)
+      ),
+    });
 
-  if (success) {
+    if (success) {
 
-    // clear form
-    reset();
+      // clear form
+      reset();
 
-    // reset grade select
-    setSelectedType("");
+      // reset grade select
+      setSelectedType("");
 
-    // refresh package list
-    onCreated();
+      // refresh package list
+      onCreated();
 
-    // optional next refresh
-    router.refresh();
+      // optional next refresh
+      router.refresh();
+    }
   }
-}
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-5"
+      className=" bg-slate-200 p-5 space-y-4"
     >
 
       {/* PACKAGE NAME */}
       <div>
-        <label className="text-sm font-medium">
+        <label className="block text-sm font-medium mb-1">
           Package Name
         </label>
 
         <input
           {...register("name")}
-          className="w-full border rounded-xl p-3"
+          className="input w-full sm:w-md"
           placeholder="Grade 11 Theory + Paper"
         />
       </div>
 
       {/* TOTAL FEE */}
       <div>
-        <label className="text-sm font-medium">
+        <label className="block text-sm font-medium mb-1">
           Total Fee
         </label>
 
         <input
           type="number"
           {...register("totalFee")}
-          className="w-full border rounded-xl p-3"
+          className="input w-full sm:w-md"
         />
       </div>
 
       {/* CLASS TYPE */}
       <div>
 
-        <label className="text-sm font-medium">
+        <label className="block text-sm font-medium mb-1">
           Select Grade
         </label>
 
         <select
-          className="w-full border rounded-xl p-3"
+          className="input w-full sm:w-md"
           value={selectedType}
           onChange={(e) =>
             setSelectedType(e.target.value)
@@ -138,13 +138,13 @@ const {
           </option>
 
           {classTypes.map(([id, name]) => (
-  <option
-    key={id}
-    value={name}
-  >
-    {name}
-  </option>
-))}
+            <option
+              key={id}
+              value={name}
+            >
+              {name}
+            </option>
+          ))}
 
         </select>
 
@@ -155,7 +155,7 @@ const {
 
         <div className="space-y-3">
 
-          <p className="text-sm font-medium">
+          <p className="block text-sm font-medium mb-1">
             Select Classes
           </p>
 
@@ -163,7 +163,7 @@ const {
 
             <label
               key={cls.id}
-              className="flex items-center gap-3 border rounded-xl p-3 hover:bg-slate-50 cursor-pointer"
+              className="flex items-center gap-3 border border-slate-500 p-3 bg-white cursor-pointer hover:bg-slate-100 w-full sm:w-md"
             >
 
               <input
@@ -192,7 +192,7 @@ const {
 
 
       <Button
-        className="w-full"
+        className="w-full sm:w-auto"
         disabled={loading}
       >
         {loading

@@ -34,10 +34,10 @@ export async function getDashboardStats(
   const now = new Date();
   const gte = since ?? sinceDays(7);
 
- 
-  // 1. BASIC METRICS (FAST QUERIES)
-  
-  const [students, dueExpires, totalEnrollments, salesAgg] =
+  // =========================
+  // 1. BASIC METRICS
+  // =========================
+  const [students, dueExpires, totalEnrollments] =
     await prisma.$transaction([
       prisma.student.count(),
       prisma.enrollment.count({
@@ -49,17 +49,27 @@ export async function getDashboardStats(
       prisma.enrollment.count({
         where: { enrolledAt: { gte } },
       }),
-      prisma.payment.aggregate({
-        where: { createdAt: { gte } },
-        _sum: { amount: true },
-      }),
     ]);
 
-  const sales = salesAgg._sum.amount ?? 0;
+  // =========================
+  // 2. SALES (FIXED - ONLY PAYMENT TABLE)
+  // =========================
+  const paymentAgg = await prisma.payment.aggregate({
+    where: {
+      createdAt: {
+        gte,
+      },
+    },
+    _sum: {
+      amount: true,
+    },
+  });
 
-  
-  // 2. PAYRATE (CLASS BASED)
- 
+  const sales = paymentAgg._sum.amount ?? 0;
+
+  // =========================
+  // 3. PAY RATE (WINDOW BASED)
+  // =========================
   const enrollmentsInWindow = await prisma.enrollment.findMany({
     where: { enrolledAt: { gte } },
     select: {
@@ -75,60 +85,11 @@ export async function getDashboardStats(
   const windowIds = enrollmentsInWindow.map((e) => e.id);
 
   const paymentClasses = await prisma.paymentClass.findMany({
-  where: {
-    enrollmentId: {
-      in: windowIds,
-    },
-  },
-  select: {
-    enrollmentId: true,
-    payment: {
-      select: {
-        amount: true,
+    where: {
+      enrollmentId: {
+        in: windowIds,
       },
     },
-  },
-});
-
-  const paidMap = paymentClasses.reduce((acc, pc) => {
-  if (pc.enrollmentId == null) return acc;
-
-  const amount = pc.payment.amount ?? 0;
-
-  acc[pc.enrollmentId] =
-    (acc[pc.enrollmentId] ?? 0) + amount;
-
-  return acc;
-}, {} as Record<number, number>);
-
-  const fullyPaid = enrollmentsInWindow.filter((e) => {
-  const fee = e.class.classFee;
-  const paid = paidMap[e.id] ?? 0;
-
-  return paid >= fee;
-}).length;
-
-const payRate =
-  enrollmentsInWindow.length > 0
-    ? Number(((fullyPaid / enrollmentsInWindow.length) * 100).toFixed(2))
-    : 0;
-
-  
-  // 3. ALL TIME TOTALS
-  
-  const [allEnrollments, allPaymentClasses] = await prisma.$transaction([
-  prisma.enrollment.findMany({
-    select: {
-      id: true,
-      class: {
-        select: {
-          classFee: true,
-        },
-      },
-    },
-  }),
-
-  prisma.paymentClass.findMany({
     select: {
       enrollmentId: true,
       payment: {
@@ -137,36 +98,87 @@ const payRate =
         },
       },
     },
-  }),
-]);
+  });
 
-  const paidAllMap = allPaymentClasses.reduce((acc, p) => {
-  if (p.enrollmentId == null) return acc;
+  const paidMap = paymentClasses.reduce((acc, pc) => {
+    if (!pc.enrollmentId) return acc;
 
-  const amount = p.payment.amount ?? 0;
+    const amount = pc.payment.amount ?? 0;
 
-  acc[p.enrollmentId] =
-    (acc[p.enrollmentId] ?? 0) + amount;
-
-  return acc;
-}, {} as Record<number, number>);
-  const totals = allEnrollments.reduce(
-  (acc, e) => {
-    const fee = e.class.classFee;
-    const paid = paidAllMap[e.id] ?? 0;
-
-    acc.fee += fee;
-    acc.paid += paid;
-    acc.due += Math.max(fee - paid, 0);
+    acc[pc.enrollmentId] = (acc[pc.enrollmentId] ?? 0) + amount;
 
     return acc;
-  },
-  { fee: 0, paid: 0, due: 0 },
-);
+  }, {} as Record<number, number>);
+
+  const fullyPaid = enrollmentsInWindow.filter((e) => {
+    const fee = e.class.classFee;
+    const paid = paidMap[e.id] ?? 0;
+
+    return paid >= fee;
+  }).length;
+
+  const payRate =
+    enrollmentsInWindow.length > 0
+      ? Number(((fullyPaid / enrollmentsInWindow.length) * 100).toFixed(2))
+      : 0;
+
+  // =========================
+  // 4. ALL TIME TOTALS
+  // =========================
+  const [allEnrollments, allPaymentClasses] = await prisma.$transaction([
+    prisma.enrollment.findMany({
+      select: {
+        id: true,
+        class: {
+          select: {
+            classFee: true,
+          },
+        },
+      },
+    }),
+    prisma.paymentClass.findMany({
+      select: {
+        enrollmentId: true,
+        payment: {
+          select: {
+            amount: true,
+          },
+        },
+      },
+    }),
+  ]);
+
+  const paidAllMap = allPaymentClasses.reduce((acc, p) => {
+    if (!p.enrollmentId) return acc;
+
+    const amount = p.payment.amount ?? 0;
+
+    acc[p.enrollmentId] = (acc[p.enrollmentId] ?? 0) + amount;
+
+    return acc;
+  }, {} as Record<number, number>);
+
+  const totals = allEnrollments.reduce(
+    (acc, e) => {
+      const fee = e.class.classFee;
+      const paid = paidAllMap[e.id] ?? 0;
+
+      acc.fee += fee;
+      acc.paid += paid;
+      acc.due += Math.max(fee - paid, 0);
+
+      return acc;
+    },
+    { fee: 0, paid: 0, due: 0 },
+  );
+
+  // =========================
+  // RETURN
+  // =========================
   return {
     students,
     dueExpires,
-    sales,
+    sales, // ✅ FIXED: ONLY PAYMENT TABLE
     totalEnrollments,
     payRate,
     totals,

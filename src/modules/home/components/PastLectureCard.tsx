@@ -9,7 +9,6 @@ import {
   Clock3,
   ArrowBigRight ,
   Video,
-  Ban,
 } from "lucide-react";
 
 type FreeLecture = {
@@ -34,7 +33,7 @@ type FreeLecture = {
   };
 };
 
-export default function FreeLectureCard({
+export default function PastLectureCard({
   lecture,
 }: {
   lecture: FreeLecture;
@@ -46,14 +45,7 @@ export default function FreeLectureCard({
 
   const isPast = isAfter(now, endTime);
 
-  if (isPast) return (
-
-     <p className="text-sm text-red-300">
-       <Ban className="inline-block mr-2" />
-        No free classes available today.
-      </p>
-
-  );
+  if (!isPast) return null;
 
   const isLive =
     isAfter(now, startTime) &&
@@ -68,8 +60,8 @@ export default function FreeLectureCard({
 
       {/* STATUS */}
       <div className="absolute top-3 right-3 sm:top-4 sm:right-4">
-        <span className="rounded-full bg-green-100 px-2 sm:px-3 py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wide text-green-700">
-          FREE
+        <span className="rounded-full bg-red-100 px-2 sm:px-3 py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wide text-red-700">
+          COMPLETED
         </span>
       </div>
 
@@ -202,7 +194,7 @@ export default function FreeLectureCard({
                   className="w-full text-xs sm:text-sm"
                 >
                  
-                  Join Now
+                  Watch Now
                 </Button>
               </Link>
 

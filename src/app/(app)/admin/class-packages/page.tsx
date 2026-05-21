@@ -6,6 +6,7 @@ import { Button } from "@/modules/ui/button";
 import Modal from "@/modules/shared/components/Modal";
 import ConfirmDelete from "@/modules/shared/components/ConfirmDelete";
 import CreatePackageForm from "@/modules/admin/class-packages/components/CreatePackageForm";
+import Spinner from "@/modules/shared/components/Spinner";
 
 export default function ClassPackagesPage() {
   const [classes, setClasses] = useState<any[]>([]);
@@ -15,10 +16,13 @@ export default function ClassPackagesPage() {
   const [selected, setSelected] = useState<any>(null);
   const [price, setPrice] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingPackages, setLoadingPackages] = useState(false);
 
 
   async function fetchData() {
     try {
+      
+
       const [clsRes, pkgRes] = await Promise.all([
         fetch("/api/backend/admin/classes/grade"),
         fetch("/api/backend/admin/class-packages"),
@@ -26,6 +30,7 @@ export default function ClassPackagesPage() {
 
       if (!clsRes.ok || !pkgRes.ok) {
         throw new Error("API failed");
+        
       }
 
       const clsData = await clsRes.json();
@@ -35,6 +40,7 @@ export default function ClassPackagesPage() {
       setPackages(pkgData);
     } catch (err) {
       toast.error("Failed to load data");
+      setLoadingPackages(true);
     }
   }
 
@@ -104,8 +110,15 @@ export default function ClassPackagesPage() {
     }
   }
 
+  if(loadingPackages) {
+    return (
+      <Spinner/>
+    )
+  }
+
   // ui
   return (
+
     <section className="container py-8 space-y-10">
 
       {/* HEADER */}
@@ -120,7 +133,7 @@ export default function ClassPackagesPage() {
       </div>
 
       {/* CREATE */}
-      <div className="bg-white border rounded-2xl p-6 shadow-sm">
+      <div className="bg-slate-200 p-6 ">
         <h2 className="text-xl font-semibold mb-4">
           Create New Package
         </h2>
@@ -145,7 +158,7 @@ export default function ClassPackagesPage() {
             {packages.map((pkg: any) => (
               <div
                 key={pkg.id}
-                className="border rounded-xl p-4 bg-white space-y-3"
+                className="border p-4 bg-white space-y-3 shadow-sm"
               >
 
                 {/* HEADER */}
@@ -155,7 +168,7 @@ export default function ClassPackagesPage() {
                       {pkg.name}
                     </h2>
 
-                    <p className="text-sm text-green-600">
+                    <p className="text-sm text-green-600 font-semibold">
                       Rs. {pkg.totalFee}
                     </p>
                   </div>
@@ -164,6 +177,8 @@ export default function ClassPackagesPage() {
                   <div className="flex gap-2">
                     <Button
                       size="sm"
+                      variant="gray"
+                      className="rounded-none"
                       onClick={() => openEdit(pkg)}
                     >
                       Edit
@@ -173,7 +188,8 @@ export default function ClassPackagesPage() {
                       <Modal.Open opens={`delete-${pkg.id}`}>
                         <Button
                           size="sm"
-                          variant="destructive"
+                          variant="ghost"
+                          className="rounded-none"
                         >
                           Delete
                         </Button>
@@ -217,7 +233,7 @@ export default function ClassPackagesPage() {
       {editOpen && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-          <div className="bg-white p-6 rounded-xl w-[400px] space-y-4">
+          <div className="bg-white p-6 w-[400px] space-y-4">
 
             <h2 className="text-lg font-semibold">
               Edit Package Price
@@ -231,7 +247,7 @@ export default function ClassPackagesPage() {
               type="number"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              className="border p-2 w-full rounded"
+              className="border p-2 w-full border-slate-400"
             />
 
             <div className="flex justify-end gap-2">
