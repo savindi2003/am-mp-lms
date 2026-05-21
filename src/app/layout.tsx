@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import Footer from "@/modules/shared/components/Footer";
 import { Suspense } from "react";
 import Spinner from "@/modules/shared/components/Spinner";
+import { Analytics } from "@vercel/analytics/next"
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -26,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.className} antialiased mb-10`}>
+       
         <Toaster
           position="top-center"
           reverseOrder={false}
@@ -79,7 +81,9 @@ export default function RootLayout({
           </Suspense>
 
           <Footer />
+          <Analytics/>
         </SessionWrapper>
+         
       </body>
     </html>
   );
