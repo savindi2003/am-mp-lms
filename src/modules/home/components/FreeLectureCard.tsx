@@ -7,9 +7,8 @@ import Image from "next/image";
 import {
   CalendarDays,
   Clock3,
-  ArrowBigRight ,
+  PlayCircle,
   Video,
-  Ban,
 } from "lucide-react";
 
 type FreeLecture = {
@@ -46,28 +45,32 @@ export default function FreeLectureCard({
 
   const isPast = isAfter(now, endTime);
 
-  if (isPast) return (
-
-     <p className="text-sm text-red-300">
-       <Ban className="inline-block mr-2" />
-        No free classes available today.
-      </p>
-
-  );
+  if (isPast) return null;
 
   const isLive =
     isAfter(now, startTime) &&
     isBefore(now, endTime);
 
-  // GOOGLE DRIVE RESOURCE LINK
-  const resourceLink =
-    "https://youtu.be/Z_H9l_e5GlM/";
+  const link = lecture.meetingLink;
+
+  // LINK TYPES
+  const isYouTube =
+    link.includes("youtube.com") ||
+    link.includes("youtu.be");
+
+  const isDrive =
+    link.includes("drive.google.com");
+
+  const isMeet =
+    link.includes("meet.google.com");
+
+  const isResource = isYouTube || isDrive;
 
   return (
     <div className="relative w-full border border-slate-200 bg-white p-3 sm:p-5 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
 
       {/* STATUS */}
-      <div className="absolute top-3 right-3 sm:top-4 sm:right-4">
+      <div className="flex justify-end my-2">
         <span className="rounded-full bg-green-100 px-2 sm:px-3 py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wide text-green-700">
           FREE
         </span>
@@ -75,19 +78,6 @@ export default function FreeLectureCard({
 
       {/* TOP */}
       <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
-
-        {/* ICON */}
-        <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-slate-100 shrink-0">
-
-          <Image
-            src="/meet.png"
-            alt="Google Meet"
-            width={32}
-            height={32}
-            className="object-contain"
-          />
-
-        </div>
 
         {/* TITLE */}
         <div className="flex-1 pr-0 sm:pr-12">
@@ -120,7 +110,7 @@ export default function FreeLectureCard({
 
           <div>
             <p className="text-[10px] sm:text-xs font-medium uppercase tracking-wide text-slate-400">
-              Lecture Date
+              Scheduled Date
             </p>
 
             <p className="text-sm font-semibold">
@@ -138,7 +128,7 @@ export default function FreeLectureCard({
 
           <div>
             <p className="text-[10px] sm:text-xs font-medium uppercase tracking-wide text-slate-400">
-              Class Time
+              Scheduled Time
             </p>
 
             <p className="text-sm font-semibold">
@@ -158,74 +148,91 @@ export default function FreeLectureCard({
         </p>
       )}
 
-      {/* TODAY CLASS RESOURCES */}
+      {/* RESOURCE / MEET SECTION */}
       <div className="mt-5 border border-blue-100 bg-slate-50 p-3 sm:p-4">
 
         {/* LABEL */}
         <div className="mb-3">
           <span className="rounded-full bg-yellow-100 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-yellow-700">
-            Class Resources
+            {isMeet
+              ? "Live Class Access"
+              : "Class Resources"}
           </span>
         </div>
 
         <div className="flex flex-col sm:flex-row items-start gap-3">
 
-          {/* VIDEO ICON */}
+          {/* ICON */}
           <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-2xl bg-white shadow-sm">
-            <Video className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" />
+
+            {isMeet ? (
+              <Image
+                src="/meet.png"
+                alt="Google Meet"
+                width={26}
+                height={26}
+                className="object-contain"
+              />
+            ) : (
+              <Video className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" />
+            )}
+
           </div>
 
           <div className="flex-1 w-full">
 
-            <p className="mt-1 text-[11px] sm:text-xs leading-relaxed text-slate-600">
-              Watch today's class video resource and learning materials.
-            </p>
+            <h4 className="font-bold text-slate-800 text-sm sm:text-base">
 
-            {/* OPEN BUTTON */}
-            
+              {isMeet
+                ? "Google Meet Live Session"
+                : "Video Learning Resource"}
+
+            </h4>
+
+            <p className="mt-1 text-[11px] sm:text-xs leading-relaxed text-slate-600">
+
+              {isMeet
+                ? "Join today's live class session through Google Meet."
+                : "Watch today's class recording and learning materials."}
+
+            </p>
 
           </div>
 
         </div>
 
-        <div>
+        {/* BUTTON */}
+        <div className="mt-4">
 
-          <div className="mt-4">
+          <Link
+            href={link}
+            target="_blank"
+            className="w-full"
+          >
+            <Button
+              className={`w-full text-xs sm:text-sm ${isMeet && isLive
+                ? "bg-red-600 hover:bg-red-700 animate-pulse text-white"
+                : ""
+                }`}
+            >
 
-              <Link
-                href={resourceLink}
-                target="_blank"
-                className="w-full"
-              >
-                <Button
-                  
-                  className="w-full text-xs sm:text-sm"
-                >
-                 
+              {isMeet ? (
+                <>
                   Join Now
-                </Button>
-              </Link>
+                </>
+              ) : (
+                <>
+                  
+                  Watch Now
+                </>
+              )}
 
-            </div>
+            </Button>
+          </Link>
 
         </div>
 
       </div>
-
-      {/* JOIN */}
-      {/* <Link href={lecture.meetingLink} target="_blank" className="mt-5 block">
-
-        <Button
-          className={`w-full h-11 text-sm font-semibold ${
-            isLive
-              ? "bg-red-600 hover:bg-red-700 animate-pulse text-white"
-              : ""
-          }`}
-        >
-          {isLive ? "Join Now" : "Join Class"}
-        </Button>
-
-      </Link> */}
     </div>
   );
 }

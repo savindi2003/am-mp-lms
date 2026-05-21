@@ -139,7 +139,7 @@ export default function FreeLectureForm({
           {/* MEETING LINK */}
           <div>
             <label className="block text-sm font-medium mb-1">
-              Meeting Link
+              Meeting or Resource Link
             </label>
             <input
               {...register("meetingLink")}
