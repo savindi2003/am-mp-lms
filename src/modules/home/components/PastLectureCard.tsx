@@ -46,7 +46,9 @@ export default function PastLectureCard({
 
   const isPast = isAfter(now, endTime);
 
-  if (!isPast) return null;
+  if (!isPast) return (
+    <p className="text-red-300 text-sm font-semibold">No previous sessions available</p>
+  );
 
   const isLive =
     isAfter(now, startTime) &&

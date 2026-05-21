@@ -9,6 +9,7 @@ import {
   Clock3,
   PlayCircle,
   Video,
+  Ban,
 } from "lucide-react";
 
 type FreeLecture = {
@@ -45,7 +46,11 @@ export default function FreeLectureCard({
 
   const isPast = isAfter(now, endTime);
 
-  if (isPast) return null;
+  if (isPast) return (
+    
+    <p className="text-red-300 text-sm font-semibold">No Upcoming sessions available</p>
+    
+  );
 
   const isLive =
     isAfter(now, startTime) &&
