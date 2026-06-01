@@ -29,7 +29,7 @@ type BaseUserDTO = {
   id: number;
   email: string;
   NIC: string;
-  userId: string;
+  userId: string | null
   photo: string | null;
   role: RoleDTO;
   createdAt: string; // we serialize Date -> string

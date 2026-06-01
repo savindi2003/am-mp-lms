@@ -31,7 +31,7 @@ export async function getCurrentUser(): Promise<CurrentUserDTO | null> {
     id: user.id,
     email: user.email,
     NIC: user.NIC,
-    userId: user.userId,
+    userId: user.userId ?? null,
     photo: user.photo ?? null,
     createdAt: user.createdAt.toISOString(),
   };
@@ -44,7 +44,7 @@ export async function getCurrentUser(): Promise<CurrentUserDTO | null> {
         student: user.student
           ? {
               id: user.student.id,
-              userId: user.student.userId,
+              userId: user.student.userId ?? null,
               firstName: user.student.firstName,
               lastName: user.student.lastName,
               createdAt: user.student.createdAt.toISOString(),
@@ -64,7 +64,7 @@ export async function getCurrentUser(): Promise<CurrentUserDTO | null> {
         instructor: user.instructor
           ? {
               id: user.instructor.id,
-              userId: user.instructor.userId,
+              userId: user.instructor.userId ?? null,
               firstName: user.instructor.firstName,
               lastName: user.instructor.lastName,
               title: user.instructor.title,
@@ -85,7 +85,7 @@ export async function getCurrentUser(): Promise<CurrentUserDTO | null> {
         admin: user.admin
           ? {
               id: user.admin.id,
-              userId: user.admin.userId,
+              userId: user.admin.userId ?? null,
               firstName: user.admin.firstName,
               lastName: user.admin.lastName,
               createdAt: user.admin.createdAt.toISOString(),
