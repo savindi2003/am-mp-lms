@@ -14,7 +14,10 @@ export type Role = "STUDENT" | "INSTRUCTOR" | "ADMIN" | null;
 export async function getCurrentUser(): Promise<CurrentUserDTO | null> {
   const session = await auth();
   const id = Number(session?.user?.id);
-  if (!id) return null;
+
+  if (!id) {
+    return null;
+  }
 
   const user = await prisma.user.findUnique({
     where: { id },
@@ -24,15 +27,17 @@ export async function getCurrentUser(): Promise<CurrentUserDTO | null> {
       admin: true,
     },
   });
-  if (!user) return null;
 
-  // Normalize common fields
+  if (!user) {
+    return null;
+  }
+
   const common = {
     id: user.id,
     email: user.email,
     NIC: user.NIC,
-    userId: user.userId ?? null,
-    photo: user.photo ?? null,
+    userId: user.userId,
+    photo: user.photo,
     createdAt: user.createdAt.toISOString(),
   };
 
@@ -40,19 +45,20 @@ export async function getCurrentUser(): Promise<CurrentUserDTO | null> {
     case "STUDENT": {
       const dto: StudentUserDTO = {
         ...common,
-        role: "STUDENT", // literal
+        role: "STUDENT",
         student: user.student
           ? {
               id: user.student.id,
-              userId: user.student.userId ?? null,
+              userId: user.student.userId,
               firstName: user.student.firstName,
               lastName: user.student.lastName,
               createdAt: user.student.createdAt.toISOString(),
             }
           : null,
-        instructor: null, // other branches set to null
+        instructor: null,
         admin: null,
       };
+
       return dto;
     }
 
@@ -64,7 +70,7 @@ export async function getCurrentUser(): Promise<CurrentUserDTO | null> {
         instructor: user.instructor
           ? {
               id: user.instructor.id,
-              userId: user.instructor.userId ?? null,
+              userId: user.instructor.userId,
               firstName: user.instructor.firstName,
               lastName: user.instructor.lastName,
               title: user.instructor.title,
@@ -73,6 +79,7 @@ export async function getCurrentUser(): Promise<CurrentUserDTO | null> {
           : null,
         admin: null,
       };
+
       return dto;
     }
 
@@ -85,15 +92,19 @@ export async function getCurrentUser(): Promise<CurrentUserDTO | null> {
         admin: user.admin
           ? {
               id: user.admin.id,
-              userId: user.admin.userId ?? null,
+              userId: user.admin.userId,
               firstName: user.admin.firstName,
               lastName: user.admin.lastName,
               createdAt: user.admin.createdAt.toISOString(),
             }
           : null,
       };
+
       return dto;
     }
+
+    default:
+      return null;
   }
 }
 
