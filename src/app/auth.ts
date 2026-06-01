@@ -15,20 +15,20 @@ const authOptions: NextAuthConfig = {
       id: "credentials",
       name: "Credentials",
       credentials: {
-        NIC: { label: "NIC", type: "text" },
+        userId: { label: "User Name", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials): Promise<User | null> {
         if (
           !credentials ||
-          typeof credentials.NIC !== "string" ||
+          typeof credentials.userId !== "string" ||
           typeof credentials.password !== "string"
         ) {
           return null;
         }
 
         const user = await prisma.user.findUnique({
-          where: { NIC: credentials.NIC },
+          where: { userId: credentials.userId },
           include: {
             student: true,
             instructor: true,
@@ -43,7 +43,7 @@ const authOptions: NextAuthConfig = {
           user.hashedPassword,
         );
         if (!isValid) return null;
-        if (!user.NIC) throw new Error("User NIC is missing");
+        if (!user.userId) throw new Error("User ID is missing");
         return {
           id: user.id.toString(),
           name:

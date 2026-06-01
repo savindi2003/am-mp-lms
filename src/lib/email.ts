@@ -33,7 +33,7 @@ export async function sendPasswordResetEmail(to: string, url: string) {
 
 export async function sendWelcomeEmail(
   to: string,
-  nic: string,
+  username: string,
   password: string,
 ) {
   const transporter = createTransport();
@@ -146,7 +146,7 @@ export async function sendWelcomeEmail(
                           font-size:18px;
                           font-weight:700;
                         ">
-                          ${nic}
+                          ${username}
                         </p>
                       </div>
 
@@ -174,25 +174,7 @@ export async function sendWelcomeEmail(
                   </tr>
                 </table>
 
-                <!-- BUTTON -->
-                <table cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
-                  <tr>
-                    <td align="center" bgcolor="#eab308">
-                      <a href="${process.env.NEXT_PUBLIC_APP_URL}"
-                        style="
-                          display:inline-block;
-                          padding:14px 30px;
-                          color:#0f172a;
-                          font-size:15px;
-                          font-weight:700;
-                          text-decoration:none;
-                        ">
-                        Log In
-                      </a>
-                    </td>
-                  </tr>
-                </table>
-
+                
                 <!-- NOTICE -->
                 <div style="
                   background:#fff7ed;
@@ -251,7 +233,7 @@ Welcome to LMS
 
 Your account has been created successfully.
 
-Username (NIC): ${nic}
+Username: ${username}
 Password: ${password}
 
 Login here:

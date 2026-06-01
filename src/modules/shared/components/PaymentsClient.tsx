@@ -20,7 +20,7 @@ export default function PaymentsClient() {
         <section>
             <div className="flex justify-between my-6">
                 <div>
-                    <h1 className="text-2xl font-semibold">Payments</h1>
+                    <h1 className="text-2xl font-semibold mb-4">Payments</h1>
 
                     <PaymentsFilters
                         month={month}

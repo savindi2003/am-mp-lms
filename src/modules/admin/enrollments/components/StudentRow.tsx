@@ -52,7 +52,7 @@ export default function StudentRow({
           {enrollment.student?.firstName} {enrollment.student?.lastName}
         </div>
         <div className="text-xs text-gray-500">
-          {enrollment.student?.user?.NIC}
+          {enrollment.student?.user?.userId}
         </div>
         <span className="text-[10px] bg-slate-800 text-white px-1 w-fit mt-1">
           {enrollment.enrollmentNumber}

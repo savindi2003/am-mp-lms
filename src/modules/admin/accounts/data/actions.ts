@@ -63,11 +63,40 @@ export async function createAccount(
     if (existingUser) return { error: "NIC already exist" };
     if (existingEmail) return { error: "Email already exist" };
 
+    let prefix = "";
+    if (input.role === "ADMIN") prefix = "ADM";
+    else if (input.role === "INSTRUCTOR") prefix = "INS";
+    else if (input.role === "STUDENT") prefix = "STD";
+
+    const latestUser = await prisma.user.findFirst({
+      where: {
+        userId: {
+          startsWith: prefix,
+        },
+      },
+      orderBy: {
+        id: "desc",
+      },
+      select: {
+        userId: true,
+      },
+    });
+
+    let nextNumber = 1;
+
+    if (latestUser?.userId) {
+      const numericPart = latestUser.userId.replace(prefix, "");
+      nextNumber = parseInt(numericPart) + 1;
+    }
+
+    const username = `${prefix}${String(nextNumber).padStart(5, "0")}`;
+
     const user = await prisma.user.create({
       data: {
         role: input.role,
         email: input.email,
         NIC: input.NIC,
+        userId: username,
         hashedPassword,
         ...(input.role === "ADMIN"
           ? {
@@ -110,7 +139,7 @@ export async function createAccount(
     let emailSent = false;
 
     try {
-      await sendWelcomeEmail(input.email, input.NIC, input.password);
+      await sendWelcomeEmail(input.email, username, input.password);
       emailSent = true;
     } catch (mailError) {
       console.log("Email send error:", mailError);
@@ -258,6 +287,7 @@ export async function getAllAccountsForAdmin() {
     select: {
       id: true,
       email: true,
+      userId: true,
       NIC: true,
       photo: true,
       role: true,
@@ -290,10 +320,11 @@ export async function getAllAccountsForAdmin() {
     },
   });
 
-  // 🔥 NORMALIZE TO SINGLE PROFILE
+  //  NORMALIZE TO SINGLE PROFILE
   return users.map((u) => ({
     id: u.id,
     email: u.email,
+    userId: u.userId,
     NIC: u.NIC,
     photo: u.photo,
     role: u.role,

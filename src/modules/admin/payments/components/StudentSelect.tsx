@@ -8,13 +8,13 @@ export default function StudentSelect({ students, onSelect }: any) {
 
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  // 🔍 FILTER ONLY WHEN USER TYPES
+  //  FILTER ONLY WHEN USER TYPES
   const filtered = useMemo(() => {
     if (!query.trim()) return [];
 
     return students
       .filter((s: any) =>
-        `${s.firstName} ${s.lastName} ${s.NIC}`
+        `${s.firstName} ${s.lastName} ${s.user?.userId}`
           .toLowerCase()
           .includes(query.toLowerCase())
       )
@@ -66,14 +66,14 @@ export default function StudentSelect({ students, onSelect }: any) {
               className="p-2 hover:bg-gray-100 cursor-pointer"
               onClick={() => {
                 onSelect(s);
-                setQuery(`${s.firstName} ${s.lastName} - ${s.NIC}`);
+                setQuery(`${s.firstName} ${s.lastName} - ${s.user?.userId}`);
                 setOpen(false);
               }}
             >
               <div className="font-sm text-sm">
                 {s.firstName} {s.lastName}
               </div>
-              <div className="text-xs text-gray-500">{s.NIC}</div>
+              <div className="text-xs text-gray-500">{s.user?.userId}</div>
             </div>
           ))}
         </div>

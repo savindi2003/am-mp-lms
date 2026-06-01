@@ -31,6 +31,7 @@ export async function getCurrentUser(): Promise<CurrentUserDTO | null> {
     id: user.id,
     email: user.email,
     NIC: user.NIC,
+    userId: user.userId,
     photo: user.photo ?? null,
     createdAt: user.createdAt.toISOString(),
   };

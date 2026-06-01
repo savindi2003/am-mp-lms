@@ -22,7 +22,7 @@ export default async function Page() {
     <div>
       <h1 className="my-5 text-3xl text-slate-800 font-semibold">Classes</h1>
       {role === "ADMIN" && (
-        <div className="ml-auto w-fit my-5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-5 sm:justify-items-center md:justify-items-end  lg:justify-items-end">
           <CreateClassButton instructors={instructors} />
 
           <FreeClasses/>

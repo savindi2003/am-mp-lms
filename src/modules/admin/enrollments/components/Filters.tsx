@@ -31,7 +31,7 @@ export default function Filters() {
 
       {/* SEARCH */}
       <div className="flex flex-col">
-        <label className={labelStyle}>Search (Name / NIC)</label>
+        <label className={labelStyle}>Search (Name / ID)</label>
         <input
           placeholder="Search..."
           className={inputStyle}

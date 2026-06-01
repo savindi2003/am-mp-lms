@@ -7,7 +7,7 @@ export default function FreeClasses() {
   const router = useRouter();
 
     return(
-        <Button variant="gray" className="mx-2"
+        <Button variant="gray" className=""
         onClick={() => router.push("/admin/free-classes")}
         >
             Free Seminar</Button>

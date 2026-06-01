@@ -19,7 +19,7 @@ export async function GET(req: Request) {
 
   const where: any = {};
 
-  // 🔍 SEARCH
+  //  SEARCH
   if (search) {
     where.OR = [
       {
@@ -35,19 +35,19 @@ export async function GET(req: Request) {
       {
         student: {
           user: {
-            NIC: { contains: search, mode: "insensitive" },
+            userId: { contains: search, mode: "insensitive" },
           },
         },
       },
     ];
   }
 
-  // 📅 MONTH
+  //  MONTH
   if (month) {
     where.activeMonth = month;
   }
 
-  // 💰 PAID
+  //  PAID
   if (paid === "paid") {
     where.activeMonth = currentMonth;
   }
@@ -56,14 +56,14 @@ export async function GET(req: Request) {
     where.NOT = { activeMonth: currentMonth };
   }
 
-  // 🎓 CLASS TYPE
+  //  CLASS TYPE
   if (classTypeId) {
     where.class = {
       classTypeId: Number(classTypeId),
     };
   }
 
-  // 📚 CLASS
+  //  CLASS
   if (classId) {
     where.classId = Number(classId);
   }

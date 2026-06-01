@@ -125,7 +125,8 @@ export default function AccountCreateForm({
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 md:min-w-5xl">
         {/* Role */}
-        <div>
+        <div className="flex flex-col gap-1">
+          <label className="text-xs font-medium text-slate-700">User Role</label>
           <select
             {...register("role")}
             className="w-full border px-3 py-2 text-sm"
@@ -140,7 +141,8 @@ export default function AccountCreateForm({
         </div>
 
         {/* NIC */}
-        <div>
+        <div className="flex flex-col gap-1">
+          <label className="text-xs font-medium text-slate-700">NIC</label>
           <input
             {...register("NIC")}
             type="text"
@@ -153,7 +155,8 @@ export default function AccountCreateForm({
         </div>
 
         {/* Email */}
-        <div>
+        <div className="flex flex-col gap-1">
+          <label className="text-xs font-medium text-slate-700">Email</label>
           <input
             {...register("email")}
             type="email"
@@ -166,7 +169,8 @@ export default function AccountCreateForm({
         </div>
 
         {/* Password */}
-        <div>
+        <div className="flex flex-col gap-1">
+          <label className="text-xs font-medium text-slate-700">Password</label>
           <input
             {...register("password")}
             type="password"
@@ -181,7 +185,8 @@ export default function AccountCreateForm({
         </div>
 
         {/* First name */}
-        <div>
+        <div className="flex flex-col gap-1">
+          <label className="text-xs font-medium text-slate-700">First Name</label>
           <input
             {...register("firstName")}
             placeholder="First name"
@@ -195,7 +200,8 @@ export default function AccountCreateForm({
         </div>
 
         {/* Last name */}
-        <div>
+        <div className="flex flex-col gap-1">
+          <label className="text-xs font-medium text-slate-700">Last Name</label>
           <input
             {...register("lastName")}
             placeholder="Last name"
@@ -210,7 +216,8 @@ export default function AccountCreateForm({
 
         {/* Title — only for instructors */}
         {role === "INSTRUCTOR" && (
-          <div>
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-slate-700">Title</label>
             <input
               {...register("title")}
               placeholder="Title"
@@ -228,7 +235,8 @@ export default function AccountCreateForm({
       {/* Student-only section */}
       {role === "STUDENT" && (
         <fieldset className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2">
-          <div>
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-slate-700">Contact No</label>
             <input
               {...register("contactNo")}
               type="tel"
@@ -242,7 +250,8 @@ export default function AccountCreateForm({
             )}
           </div>
 
-          <div>
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-slate-700">Guardian Contact No (Optional)</label>
             <input
               {...register("guardianContactNo")}
               type="tel"
@@ -256,7 +265,8 @@ export default function AccountCreateForm({
             )}
           </div>
 
-          <div>
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-slate-700">Guardian First Name</label>
             <input
               {...register("guardianFirstName")}
               placeholder="Guardian First Name"
@@ -269,7 +279,8 @@ export default function AccountCreateForm({
             )}
           </div>
 
-          <div>
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-slate-700">Guardian Last Name</label>
             <input
               {...register("guardianLastName")}
               placeholder="Guardian Last Name"
@@ -282,10 +293,8 @@ export default function AccountCreateForm({
             )}
           </div>
 
-          <div className="flex justify-start items-center gap-2">
-            <label htmlFor="dob" className="mb-1 text-sm text-slate-400 px-4">
-              Date of Birth
-            </label>
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-slate-700">Date of Birth</label>
             <input
               {...register("dob")}
               type="date"
@@ -298,7 +307,8 @@ export default function AccountCreateForm({
             )}
           </div>
 
-          <div>
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-slate-700">Gender</label>
             <select
               {...register("gender")}
               className="w-full border px-3 py-2 text-sm"
@@ -318,6 +328,7 @@ export default function AccountCreateForm({
           </div>
 
           <div className="sm:col-span-2">
+            <label className="text-xs font-medium text-slate-700">Address</label>
             <input
               {...register("address")}
               placeholder="Address"

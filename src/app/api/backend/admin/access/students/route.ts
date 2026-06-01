@@ -10,7 +10,7 @@ export async function GET(req: Request) {
       OR: [
         { firstName: { contains: q, mode: "insensitive" } },
         { lastName: { contains: q, mode: "insensitive" } },
-        { user: { NIC: { contains: q } } },
+        { user: { userId: { contains: q } } },
       ],
     },
     include: { user: true },

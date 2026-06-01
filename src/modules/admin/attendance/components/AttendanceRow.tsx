@@ -20,7 +20,7 @@ export default function AttendanceRow({
 
       <div className="font-medium text-sm">{data.name}</div>
 
-      <div className="text-sm">{data.nic}</div>
+      <div className="text-sm">{data.userId}</div>
 
       <div className="text-sm">{data.enrollmentNumber}</div>
 

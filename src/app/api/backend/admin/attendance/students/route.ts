@@ -33,9 +33,10 @@ export async function GET(req: Request) {
       studentId: e.studentId,
       name: e.student.firstName + " " + e.student.lastName,
       nic: e.student.user.NIC,
+      userId: e.student.user.userId,
       enrollmentNumber: e.enrollmentNumber,
 
-      // 🔥 IMPORTANT PART
+      //  IMPORTANT PART
       present: att ? att.present : true,
       isSaved: !!att,
     };

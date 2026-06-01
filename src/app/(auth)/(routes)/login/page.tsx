@@ -31,7 +31,7 @@ export default function LoginPage() {
     });
 
     if (result?.error) {
-      toast.error("Incorrect NIC or password!", { id: toastId });
+      toast.error("Incorrect User name or password!", { id: toastId });
     } else {
       toast.success("Logged in!", { id: toastId });
       window.location.href = "/dashboard";
@@ -70,19 +70,19 @@ export default function LoginPage() {
             {/* NIC */}
             <div className="flex flex-col gap-1">
               <label className="text-slate-800 text-sm font-medium">
-                National ID
+                User Name
               </label>
 
               <input
-                {...register("NIC")}
+                {...register("userId")}
                 type="text"
                 className="input w-full"
-                placeholder="Enter your NIC"
+                placeholder="Enter your User Name"
               />
 
-              {errors.NIC && (
+              {errors.userId && (
                 <p className="text-red-600 text-xs">
-                  {errors.NIC.message}
+                  {errors.userId.message}
                 </p>
               )}
             </div>

@@ -36,7 +36,7 @@ export async function GET(req: Request) {
           {
             student: {
               user: {
-                NIC: { contains: search, mode: "insensitive" },
+                userId: { contains: search, mode: "insensitive" },
               },
             },
           },

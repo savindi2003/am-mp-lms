@@ -73,7 +73,7 @@ export default function Page() {
 
     return (
       (s.name || "").toLowerCase().includes(q) ||
-      (s.nic || "").toLowerCase().includes(q)
+      (s.userId || "").toLowerCase().includes(q)
     );
   });
 

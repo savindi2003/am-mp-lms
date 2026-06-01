@@ -339,7 +339,7 @@ export default function AccessTable({ refreshKey }: any) {
       `${item?.student?.firstName ?? ""} ${item?.student?.lastName ?? ""}`.toLowerCase();
 
     const nic =
-      item?.student?.user?.NIC?.toLowerCase() ?? "";
+      item?.student?.user?.userId?.toLowerCase() ?? "";
 
     const matchesSearch =
       name.includes(q) || nic.includes(q);
@@ -370,7 +370,7 @@ export default function AccessTable({ refreshKey }: any) {
           onChange={(e) =>
             setSearch(e.target.value)
           }
-          placeholder="Search by name or NIC..."
+          placeholder="Search by name or ID..."
           className="input w-full p-2 md:w-80"
         />
 
@@ -424,7 +424,8 @@ export default function AccessTable({ refreshKey }: any) {
           <thead className="bg-gray-100 text-left">
             <tr>
               <th className="p-2">Student</th>
-              <th className="p-2">NIC</th>
+              <th className="p-2">ID</th>
+              <th className="p-2">Grade</th>
               <th className="p-2">Class</th>
               <th className="p-2">Month</th>
               <th className="p-2">Status</th>
@@ -468,13 +469,13 @@ export default function AccessTable({ refreshKey }: any) {
                           {item.student?.lastName}
                         </div>
 
-                        <div className="text-xs text-gray-500">
-                          {item.student?.user?.NIC}
-                        </div>
-
                         <span className="inline-block text-[10px] bg-slate-700 text-white px-2 py-0.5 ">
                           #{item.enrollment?.enrollmentNumber}
                         </span>
+                      </td>
+
+                      <td className="p-2">
+                        {item.student?.user?.userId}
                       </td>
 
                       {/* CLASS TYPE */}

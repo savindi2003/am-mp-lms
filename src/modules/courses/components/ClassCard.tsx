@@ -23,7 +23,7 @@ export default function ClassCard({
           alt="class"
           width={400}
           height={250}
-          className="w-full h-48 object-cover"
+          className="w-full h-auto object-cover"
         />
       </Link>
 

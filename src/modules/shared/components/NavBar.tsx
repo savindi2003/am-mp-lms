@@ -39,7 +39,7 @@ export default function NavBar({ user }: { user: CurrentUserDTO }) {
         <Logo logoUrl="/logo/logo1.png" linkUrl="/dashboard" />
 
         {/* Desktop (md+) */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-4">
           <NavigationMenu className="border-none shadow-none">
             <NavigationMenuList className="flex items-start gap-3">
               <NavigationMenuItem>
@@ -54,7 +54,7 @@ export default function NavBar({ user }: { user: CurrentUserDTO }) {
                     ) : (
                       ""
                     )}
-                    {user?.student ? `  ${user.NIC}` : ""}
+                    {user?.student ? `  ${user.userId}` : ""}
 
                     {user?.admin ? (
                       <span className="bg-slate-600 ml-1 text-slate-50 px-1">
@@ -178,7 +178,7 @@ export default function NavBar({ user }: { user: CurrentUserDTO }) {
         </div>
 
         {/* Mobile (<md) */}
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <Sheet>
             <SheetTrigger asChild>
               <Button
@@ -208,7 +208,7 @@ export default function NavBar({ user }: { user: CurrentUserDTO }) {
                     {user?.instructor
                       ? user.instructor.title
                       : user?.student
-                        ? user.NIC
+                        ? user.userId
                         : ""}
                   </div>
                 </div>

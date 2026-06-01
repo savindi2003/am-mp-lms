@@ -87,7 +87,7 @@ export default function AccessForm({ onSuccess }: any) {
         </label>
 
         <input
-          placeholder="Type name or NIC..."
+          placeholder="Type name or ID..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="input w-full sm:w-md"
@@ -108,7 +108,7 @@ export default function AccessForm({ onSuccess }: any) {
                 }}
                 className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm w-full sm:w-md"
               >
-                {s.firstName} {s.lastName} ({s.user.NIC})
+                {s.firstName} {s.lastName} ({s.user.userId})
               </div>
             ))}
           </div>

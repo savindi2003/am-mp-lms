@@ -80,7 +80,14 @@ export default function AccountTableRow({
     <tr className="border-t ">
       {/* NAME */}
       <td className="p-3 font-medium">
-        {firstName} {lastName}
+        <div>
+          {firstName} {lastName}
+        </div>
+
+        <div className="text-xs text-white bg-slate-500 w-max px-1">
+          {user.userId}
+        </div>
+        
       </td>
 
       {/* EMAIL */}

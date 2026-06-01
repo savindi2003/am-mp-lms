@@ -5,6 +5,7 @@ export type AccountUser = {
   id: number;
   email: string | null;
   NIC: string;
+  userId:string;
   role: Role;
   photo: string | null;
   createdAt: Date;
