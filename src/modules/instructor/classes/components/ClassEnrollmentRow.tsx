@@ -17,13 +17,13 @@ export default function ClassEnrollmentRow({
   const nic = enrollment.student.user?.NIC ?? "-";
 
   return (
-    <Table.Row styles="grid grid-cols-6 p-3 text-sm">
+    <Table.Row styles="grid grid-cols-6 p-3 text-sm min-w-[900px]">
       <div>{name}</div>
 
       <div>{nic}</div>
 
       <div>
-        <span className="bg-slate-600 text-white px-2 py-1 text-xs">
+        <span className="bg-slate-600  text-white px-2 py-1 text-[10px]">
           {enrollment.enrollmentNumber}
         </span>
       </div>

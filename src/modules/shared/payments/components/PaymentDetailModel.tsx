@@ -4,7 +4,7 @@ export default function PaymentDetailsModal({
   payment,
 }: any) {
   return (
-    <div className="w-[500px] p-5 space-y-4 ">
+    <div className="w-full p-5 space-y-4 ">
 
       <div>
         <h2 className="text-lg font-semibold text-slate-800">

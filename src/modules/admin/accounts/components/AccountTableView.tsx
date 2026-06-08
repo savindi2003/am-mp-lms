@@ -40,9 +40,11 @@ export default function AccountTableView({
   return (
     <div className="space-y-4">
       {/* FILTERS */}
-      <div className="flex gap-3">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 sm:w-full md:w-2/3 lg:w-2/3">
         <div className="flex flex-col gap-1">
-          <label className="text-xs font-medium text-slate-700">Student Email</label>
+          <label className="text-xs font-medium text-slate-700">
+            Student Email
+          </label>
           <input
             className="border p-2 text-sm"
             placeholder="Search..."
@@ -51,44 +53,39 @@ export default function AccountTableView({
           />
         </div>
 
-
-        <div className="flex gap-3">
-          <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-slate-700">User Role</label>
-            <select
-              className="border p-2 text-sm"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-            >
-              <option value="ALL">All</option>
-              <option value="ADMIN">ADMIN</option>
-              <option value="INSTRUCTOR">INSTRUCTOR</option>
-              <option value="STUDENT">STUDENT</option>
-            </select>
-          </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-xs font-medium text-slate-700">
+            User Role
+          </label>
+          <select
+            className="border p-2 text-sm"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+          >
+            <option value="ALL">All</option>
+            <option value="ADMIN">ADMIN</option>
+            <option value="INSTRUCTOR">INSTRUCTOR</option>
+            <option value="STUDENT">STUDENT</option>
+          </select>
         </div>
-        </div>
+      </div>
 
-        {/* TABLE */}
-        <div className="border  bg-white">
-          {/* HEADER */}
-          <table className="w-full text-sm sm:overflow-x-auto">
-            <thead className="px-4 py-2 text-sm font-bold bg-gray-100">
-              <tr>
-                <th className="p-3 text-left">Name</th>
-                <th className="p-3 text-left">Email</th>
-                <th className="p-3 text-left">Role</th>
-                <th className="p-3 text-left">NIC</th>
-                <th className="p-3 text-left">Contact</th>
-                <th className="p-3 text-left">Created</th>
-                <th className="p-3 text-center">Actions</th>
-              </tr>
-            </thead>
-          </table>
+      <div className="border bg-white overflow-hidden">
+        <div className="overflow-x-auto">
+          <div className="max-h-[500px] overflow-y-auto">
+            <table className="w-full min-w-[900px] text-sm">
+              <thead className="sticky top-0 z-10 bg-gray-100">
+                <tr>
+                  <th className="p-3 text-left">Name</th>
+                  <th className="p-3 text-left">Email</th>
+                  <th className="p-3 text-left">Role</th>
+                  <th className="p-3 text-left">NIC</th>
+                  <th className="p-3 text-left">Contact</th>
+                  <th className="p-3 text-left">Created</th>
+                  <th className="p-3 text-center">Actions</th>
+                </tr>
+              </thead>
 
-          {/* BODY (SCROLLABLE) */}
-          <div className="max-h-125 overflow-y-auto bg-white">
-            <table className="w-full text-sm">
               <tbody>
                 {filtered.map((user) => (
                   <AccountTableRow
@@ -100,6 +97,7 @@ export default function AccountTableView({
             </table>
           </div>
         </div>
+      </div>
       </div>
       );
 }

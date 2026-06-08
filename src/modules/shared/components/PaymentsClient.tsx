@@ -18,7 +18,7 @@ export default function PaymentsClient() {
 
     return (
         <section>
-            <div className="flex justify-between my-6">
+            <div className="flex flex-col gap-4 my-6 lg:flex-row lg:justify-between">
                 <div>
                     <h1 className="text-2xl font-semibold mb-4">Payments</h1>
 

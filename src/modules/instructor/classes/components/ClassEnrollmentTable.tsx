@@ -23,24 +23,29 @@ export default function ClassEnrollmentTable({ classId }: { classId: number }) {
 
   return (
     <>
-      <div className="border">
-        <Table>
-          <Table.Header styles="grid grid-cols-6 p-3 bg-slate-100 text-sm font-semibold">
-            <div>Name</div>
-            <div>NIC</div>
-            <div>Enrollment No</div>
-            <div>Date</div>
-            <div>Active Month</div>
-            <div>Status</div>
-          </Table.Header>
+      <div className="border overflow-x-auto">
+        <div className="min-w-[900px]">
+          <Table>
+            <Table.Header styles="grid grid-cols-6 p-3 bg-slate-100 text-sm font-semibold">
+              <div>Name</div>
+              <div>NIC</div>
+              <div>Enrollment No</div>
+              <div>Date</div>
+              <div>Active Month</div>
+              <div>Status</div>
+            </Table.Header>
 
-          <Table.Body
-            data={enrollments}
-            render={(enrollment) => (
-              <ClassEnrollmentRow key={enrollment.id} enrollment={enrollment} />
-            )}
-          />
-        </Table>
+            <Table.Body
+              data={enrollments}
+              render={(enrollment) => (
+                <ClassEnrollmentRow
+                  key={enrollment.id}
+                  enrollment={enrollment}
+                />
+              )}
+            />
+          </Table>
+        </div>
       </div>
 
       <Pagination count={total} refetch={refetch} />

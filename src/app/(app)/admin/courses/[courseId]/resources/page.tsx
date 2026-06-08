@@ -40,7 +40,7 @@ export default async function AdminCourseVideosPage({
   });
 
   return (
-    <section className="container flex flex-col gap-20">
+    <section className="container flex flex-col gap-20  mx-auto px-4">
 
       <div className="mt-10">
         <ClassLinkManager

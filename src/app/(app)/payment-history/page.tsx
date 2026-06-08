@@ -9,5 +9,9 @@ export default async function PaymentsPage() {
     redirect("/login");
   }
 
-  return <PaymentsClient />;
+  return (
+    <div className="container mx-auto px-4 md:px-0 lg:px-0">
+      <PaymentsClient />
+    </div>
+  );
 }

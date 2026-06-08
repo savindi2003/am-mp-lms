@@ -23,7 +23,7 @@ export default async function Page({
   const last = parseDays((await searchParams)?.last);
 
   return (
-    <>
+    <div className="container mx-auto px-4 md:px-0 lg:px-0">
       <h1 className="text-3xl font-semibold text-slate-800 my-5 mb-10">
         {session?.user.role === "ADMIN" ? "Dashboard" : "Home"}
       </h1>
@@ -39,6 +39,6 @@ export default async function Page({
           )}
         </Suspense>
       </div>
-    </>
+    </div>
   );
 }

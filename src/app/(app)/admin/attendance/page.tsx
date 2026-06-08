@@ -78,7 +78,10 @@ export default function Page() {
   });
 
   return (
-    <div className="p-5 space-y-4">
+    <div className="container mx-auto px-4 md:px-0 lg:px-0">
+      <h1 className="text-3xl font-semibold mb-5">
+        Student Attendance 
+      </h1>
 
       <AttendanceFilters
         filters={filters}
@@ -98,7 +101,7 @@ export default function Page() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search name or NIC"
-          className="input w-full md:w-80 text-sm justify-end"
+          className="input w-full md:w-80 text-sm justify-end my-3"
         />
       )}
 

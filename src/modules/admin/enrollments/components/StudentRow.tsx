@@ -44,7 +44,7 @@ export default function StudentRow({
   }
 
   return (
-    <Table.Row styles="grid md:grid-cols-7 px-4 py-3 items-center">
+    <Table.Row styles="grid grid-cols-7 px-4 py-3 items-center">
 
       {/* STUDENT */}
       <div>

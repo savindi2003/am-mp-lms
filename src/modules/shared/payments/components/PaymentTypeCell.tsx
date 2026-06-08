@@ -7,7 +7,7 @@ export default function PaymentTypeCell({
   payment,
 }: any) {
 
-  // ✅ SINGLE PAYMENT
+  //  SINGLE PAYMENT
   if (payment.type === "SINGLE") {
     return (
       <span className="text-xs font-semibold px-2 py-1 rounded bg-green-100 text-green-700">
@@ -16,7 +16,7 @@ export default function PaymentTypeCell({
     );
   }
 
-  // ✅ PACKAGE PAYMENT
+  //  PACKAGE PAYMENT
   return (
     <Modal>
 

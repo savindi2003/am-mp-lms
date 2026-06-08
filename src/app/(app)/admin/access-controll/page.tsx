@@ -15,7 +15,7 @@ export default function AdminAccessControll(){
 
     return(
 
-        <section>
+      <section className="container mx-auto px-4 md:px-0 lg:px-0">
 
             <div className="mb-6">
             <h1 className="my-5 text-3xl font-semibold text-slate-800">Access Controll</h1>

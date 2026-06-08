@@ -11,7 +11,7 @@ export default function AttendanceTable({
   return (
     <div className="bg-white border mt-4">
 
-      <div className="grid md:grid-cols-5 px-4 py-2 text-sm font-bold bg-gray-100">
+      <div className="hidden md:grid md:grid-cols-5 px-4 py-2 text-sm font-bold bg-gray-100">
         <div>Student</div>
         <div>Student ID</div>
         <div>Enroll ID</div>

@@ -119,7 +119,7 @@ export default function ClassPackagesPage() {
   // ui
   return (
 
-    <section className="container py-8 space-y-10">
+    <section className="container mx-auto px-4 py-6">
 
       {/* HEADER */}
       <div>
@@ -133,7 +133,7 @@ export default function ClassPackagesPage() {
       </div>
 
       {/* CREATE */}
-      <div className="bg-slate-200 p-6 ">
+      <div className="bg-slate-200 px-3 py-6 mt-3">
         <h2 className="text-xl font-semibold mb-4">
           Create New Package
         </h2>
@@ -144,7 +144,7 @@ export default function ClassPackagesPage() {
       {/* LIST */}
       <div className="space-y-5">
 
-        <h2 className="text-xl font-semibold">
+        <h2 className="text-xl font-semibold mt-5">
           Existing Packages
         </h2>
 

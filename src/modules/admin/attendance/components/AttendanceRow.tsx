@@ -33,7 +33,7 @@ export default function AttendanceRow({
       </div>
 
       {/* ACTION */}
-      <div className="flex gap-2">
+      <div className="flex gap-2 justify-end">
         <button
           onClick={() => toggle(true)}
           className={`px-2 py-1 text-sm ${

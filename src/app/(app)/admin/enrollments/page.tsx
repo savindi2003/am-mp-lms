@@ -21,8 +21,8 @@ export default function AdminEnrollmentsPage() {
   return (
     <section className="container mx-auto px-4 py-6">
       
-      <div className="flex justify-between mb-6">
-        <h1 className="text-2xl font-semibold">Class Enrollments</h1>
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
+        <h1 className="text-2xl font-semibold mb-4 md:mb-0">Class Enrollments</h1>
         <CreatePaymentModal getEnrollments={getEnrollments} />
       </div>
 

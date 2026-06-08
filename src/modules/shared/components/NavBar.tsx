@@ -254,7 +254,7 @@ export default function NavBar({ user }: { user: CurrentUserDTO }) {
                         href="/payments"
                         className="block rounded-none px-1 py-2 text-sm text-slate-700 active:text-yellow-500"
                       >
-                        Paymentsh
+                        Payments
                       </Link>
                     </SheetClose>
                   </li>
@@ -276,10 +276,10 @@ export default function NavBar({ user }: { user: CurrentUserDTO }) {
                   <li>
                     <SheetClose asChild>
                       <Link
-                        href="/admin/accounts"
+                        href="/admin/enrollments"
                         className="block rounded-none px-1 py-2 text-sm text-slate-700 active:text-yellow-500"
                       >
-                        Attendance
+                        Enrollments
                       </Link>
                     </SheetClose>
                   </li>

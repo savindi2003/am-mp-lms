@@ -19,16 +19,13 @@ export default async function Page() {
   const classTypes = await getClassTypes();
 
   return (
-    <div>
+    <div className="container mx-auto px-4 md:px-0 lg:px-0">
       <h1 className="my-5 text-3xl text-slate-800 font-semibold">Classes</h1>
       {role === "ADMIN" && (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-5 sm:justify-items-center md:justify-items-end  lg:justify-items-end">
+        <div className="grid grid-cols-1 md:flex gap-3 my-5">
           <CreateClassButton instructors={instructors} />
-
-          <FreeClasses/>
-          <ClassPackages/>
-
-          
+          <FreeClasses />
+          <ClassPackages />
         </div>
       )}
       <Suspense fallback={<Spinner />}>

@@ -69,7 +69,27 @@ function Window({ children, name }: WindowProps) {
     <div className="fixed top-0 left-0 z-1003 h-dvh w-full overflow-auto bg-slate-900/10 backdrop-blur-xs">
       <div
         ref={ref}
-        className="xl:px-10px fixed top-1/2 left-1/2 w-85 -translate-x-1/2 -translate-y-1/2 transform bg-slate-50 px-2 py-5 transition-all duration-300 sm:w-auto md:px-5"
+        className="
+    fixed
+    left-1/2
+    top-1/2
+    -translate-x-1/2
+    -translate-y-1/2
+    bg-slate-50
+    
+    shadow-lg
+    px-4
+    py-5
+    transition-all
+    duration-300
+
+    w-[95vw]
+    sm:w-fit
+    max-w-[95vw]
+    max-h-[90vh]
+
+    overflow-y-auto
+  "
       >
         <div className="ml-auto w-fit">
           <Button onClick={close} className="cursor-pointer" variant="close">
