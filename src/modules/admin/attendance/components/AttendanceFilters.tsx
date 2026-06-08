@@ -74,7 +74,7 @@ export default function AttendanceFilters({
       {/* DATE */}
       <input
         type="date"
-        className="input"
+        className="input w-full"
         onChange={(e) =>
           setFilters({
             ...filters,
